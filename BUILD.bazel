@@ -1,2 +1,124 @@
+load("@buildifier_prebuilt//:rules.bzl", "buildifier", "buildifier_test", "buildozer_binary")
+load("@gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@rules_go//go:def.bzl", "nogo")
+
 licenses(["notice"])
-exports_files(["LICENSE"])
+
+exports_files([
+    "LICENSE",
+    "MODULE.bazel",
+])
+
+gazelle_binary(
+    name = "custom_gazelle_binary",
+    languages = [
+        "@gazelle//language/go",  # Built-in rule from gazelle for Golang.
+        "@gazelle//language/proto",  # Built-in rule from gazelle for Protos.
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# gazelle:prefix github.com/jrockway/monorepo
+gazelle(
+    name = "gazelle",
+    gazelle = "//:custom_gazelle_binary",
+)
+
+nogo(
+    name = "nogo",
+    config = "nogo.json",
+    visibility = ["//visibility:public"],  # must have public visibility
+    deps = [
+        # These are go vet's checks; hard-coded here so that upgrading golang.org/x/tools doesn't
+        # add new linters unexpectedly.  Commented-out lines are available passes (bazel query
+        # 'kind(go_library, @org_golang_x_tools//go/analysis/passes/...)' | grep -v testdata | grep
+        # -v cmd | grep -v internal) but that govet doesn't run (`go tool vet help` explains).
+        "@org_golang_x_tools//go/analysis/passes/appends",
+        "@org_golang_x_tools//go/analysis/passes/asmdecl",
+        "@org_golang_x_tools//go/analysis/passes/assign",
+        "@org_golang_x_tools//go/analysis/passes/atomic",
+        "@org_golang_x_tools//go/analysis/passes/atomicalign",
+        "@org_golang_x_tools//go/analysis/passes/bools",
+        "@org_golang_x_tools//go/analysis/passes/buildssa",
+        "@org_golang_x_tools//go/analysis/passes/buildtag",
+        # "@org_golang_x_tools//go/analysis/passes/cgocall:cgocall", # not supported by rules_go, apparently
+        "@org_golang_x_tools//go/analysis/passes/composite",
+        "@org_golang_x_tools//go/analysis/passes/copylock",
+        "@org_golang_x_tools//go/analysis/passes/ctrlflow",
+        "@org_golang_x_tools//go/analysis/passes/deepequalerrors",
+        "@org_golang_x_tools//go/analysis/passes/defers",
+        "@org_golang_x_tools//go/analysis/passes/directive",
+        "@org_golang_x_tools//go/analysis/passes/errorsas",
+        "@org_golang_x_tools//go/analysis/passes/fieldalignment",
+        "@org_golang_x_tools//go/analysis/passes/findcall",
+        "@org_golang_x_tools//go/analysis/passes/framepointer",
+        "@org_golang_x_tools//go/analysis/passes/httpmux",
+        "@org_golang_x_tools//go/analysis/passes/httpresponse",
+        "@org_golang_x_tools//go/analysis/passes/ifaceassert",
+        "@org_golang_x_tools//go/analysis/passes/inspect",
+        "@org_golang_x_tools//go/analysis/passes/loopclosure",
+        "@org_golang_x_tools//go/analysis/passes/lostcancel",
+        "@org_golang_x_tools//go/analysis/passes/nilfunc",
+        "@org_golang_x_tools//go/analysis/passes/nilness",
+        # "@org_golang_x_tools//go/analysis/passes/pkgfact:pkgfact",
+        "@org_golang_x_tools//go/analysis/passes/printf",
+        "@org_golang_x_tools//go/analysis/passes/reflectvaluecompare",
+        "@org_golang_x_tools//go/analysis/passes/shadow",
+        "@org_golang_x_tools//go/analysis/passes/shift",
+        "@org_golang_x_tools//go/analysis/passes/sigchanyzer",
+        "@org_golang_x_tools//go/analysis/passes/slog",
+        "@org_golang_x_tools//go/analysis/passes/sortslice",
+        "@org_golang_x_tools//go/analysis/passes/stdmethods",
+        "@org_golang_x_tools//go/analysis/passes/stdversion",
+        "@org_golang_x_tools//go/analysis/passes/stringintconv",
+        "@org_golang_x_tools//go/analysis/passes/structtag",
+        "@org_golang_x_tools//go/analysis/passes/testinggoroutine",
+        "@org_golang_x_tools//go/analysis/passes/tests",
+        "@org_golang_x_tools//go/analysis/passes/timeformat",
+        "@org_golang_x_tools//go/analysis/passes/unmarshal",
+        "@org_golang_x_tools//go/analysis/passes/unreachable",
+        "@org_golang_x_tools//go/analysis/passes/unsafeptr",
+        "@org_golang_x_tools//go/analysis/passes/unusedresult",
+        "@org_golang_x_tools//go/analysis/passes/unusedwrite",
+        "@org_golang_x_tools//go/analysis/passes/usesgenerics",
+    ],
+)
+
+buildifier(
+    name = "buildifier",
+    exclude_patterns = [
+        "./.git/*",
+    ],
+    mode = "fix",
+)
+
+buildifier_test(
+    name = "buildifier_test",
+    size = "small",
+    exclude_patterns = [
+        "./.git/*",
+    ],
+    lint_mode = "warn",
+    mode = "diff",
+    no_sandbox = True,
+    tags = [
+        "manual",
+        "style",
+    ],
+    workspace = "//:MODULE.bazel",
+)
+
+buildozer_binary(
+    name = "buildozer",
+)
+
+test_suite(
+    name = "style_tests",
+    tags = [
+        "manual",
+        "style",
+    ],
+    tests = [
+        ":buildifier_test",
+    ],
+)

@@ -8,3 +8,9 @@ one.
 Install [Bazelisk](https://github.com/bazelbuild/bazelisk), then:
 
     bazel test ...
+
+I put this in my `.bazelrc`:
+
+    test --test_output=errors
+    startup --max_idle_secs=604800
+    build --disk_cache=/tmp/bazel
