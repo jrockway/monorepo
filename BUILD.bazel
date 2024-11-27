@@ -116,6 +116,7 @@ buildifier_test(
     no_sandbox = True,
     tags = [
         "manual",
+        "no-remote",
         "style",
     ],
     workspace = "//:MODULE.bazel",
