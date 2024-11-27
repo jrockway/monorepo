@@ -1,4 +1,13 @@
 build --workspace_status_command=$(pwd)/workspace_status.sh
 
+build:remotecache --bes_results_url=https://app.buildbuddy.io/invocation/
+build:remotecache --bes_backend=grpcs://remote.buildbuddy.io
+build:remotecache --remote_cache=grpcs://remote.buildbuddy.io
+build:remotecache --remote_timeout=3600
+build:remotecache --experimental_remote_cache_compression --experimental_remote_cache_compression_threshold=100
+build:remotecache --noslim_profile --experimental_profile_include_target_label --experimental_profile_include_primary_output
+build:remotecache --nolegacy_important_outputs
+build:remotecache --build_metadata=REPO_URL=https://github.com/jrockway/monorepo.git
+
 # local modifications should take priority
 try-import %workspace%/.bazelrc.local
