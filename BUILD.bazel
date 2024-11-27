@@ -1,6 +1,7 @@
 load("@buildifier_prebuilt//:rules.bzl", "buildifier", "buildifier_test", "buildozer_binary")
 load("@gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@rules_go//go:def.bzl", "nogo")
+load("//internal/analyzers/staticcheck:def.bzl", "all_staticcheck_analyzers")  # buildifier: disable=bzl-visibility
 
 licenses(["notice"])
 
@@ -28,7 +29,7 @@ nogo(
     name = "nogo",
     config = "nogo.json",
     visibility = ["//visibility:public"],  # must have public visibility
-    deps = [
+    deps = all_staticcheck_analyzers + [
         # These are go vet's checks; hard-coded here so that upgrading golang.org/x/tools doesn't
         # add new linters unexpectedly.  Commented-out lines are available passes (bazel query
         # 'kind(go_library, @org_golang_x_tools//go/analysis/passes/...)' | grep -v testdata | grep
@@ -81,6 +82,18 @@ nogo(
         "@org_golang_x_tools//go/analysis/passes/unusedresult",
         "@org_golang_x_tools//go/analysis/passes/unusedwrite",
         "@org_golang_x_tools//go/analysis/passes/usesgenerics",
+    ] + [
+        # These are checks that live in this repo.  Mostly stolen from golangci-lint.
+        "//internal/analyzers/ineffassign",
+        "//internal/analyzers/wrapcheck",
+        "//internal/analyzers/errcheck",
+        "//internal/analyzers/depguard",
+        "//internal/analyzers/asasalint",
+        "//internal/analyzers/asciicheck",
+        "//internal/analyzers/bidichk",
+        "//internal/analyzers/goprintffuncname",
+        "//internal/analyzers/exhaustive",
+        "//internal/analyzers/gofmt",
     ],
 )
 

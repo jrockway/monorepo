@@ -1,0 +1,20 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "errors",
+    srcs = [
+        "errors.go",
+        "multi.go",
+    ],
+    importpath = "github.com/jrockway/monorepo/internal/errors",
+    visibility = ["//:__subpackages__"],
+    deps = ["@com_github_pkg_errors//:errors"],
+)
+
+go_test(
+    name = "errors_test",
+    size = "small",
+    srcs = ["multi_test.go"],
+    embed = [":errors"],
+    deps = ["@com_github_pkg_errors//:errors"],
+)
