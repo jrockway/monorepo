@@ -1,0 +1,14 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "serveme_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/jrockway/monorepo/serveme",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "serveme",
+    embed = [":serveme_lib"],
+    visibility = ["//visibility:public"],
+)
