@@ -1,0 +1,4 @@
+module(
+    name = "monorepo",
+    repo_name = "com_github_jrockway_monorepo",
+)

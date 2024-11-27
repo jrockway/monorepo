@@ -1,0 +1,4 @@
+build --workspace_status_command=$(pwd)/workspace_status.sh
+
+# local modifications should take priority
+try-import %workspace%/.bazelrc.local
