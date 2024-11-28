@@ -1,0 +1,26 @@
+baseURL: "https://jrock.us/"
+languageCode: "en-us"
+title: "jrock.us"
+pagination:
+    pagerSize: 10
+rssLimit: 20
+params:
+    fullWidthTheme: true
+    centerTheme: true
+    subtitle: ""
+    author:
+        name: "June Rockway"
+        email: "june@jrock.us"
+languages:
+    en:
+        params:
+            languageName: "English"
+            title: "jrock.us"
+            subtitle: ""
+            keywords: ""
+            menuMore: "Show more"
+            readMore: "Read more"
+            readOtherPosts: "To the future, or to the past?"
+            logo:
+                logoText: "jrock.us"
+                logoHomeLink: "/"

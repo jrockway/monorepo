@@ -1,3 +1,4 @@
 bazel-*
 .bazelrc.local
 node_modules
+www.jrock.us/static/assets
