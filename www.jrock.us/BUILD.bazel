@@ -1,0 +1,23 @@
+load("@aspect_rules_esbuild//esbuild:defs.bzl", "esbuild")
+
+esbuild(
+    name = "style",
+    srcs = glob([
+        "src/css/**",
+        "src/fonts/**",
+    ]) + [
+        "//:node_modules/@deanc/esbuild-plugin-postcss",
+        "//:node_modules/cssnano",
+        "//:node_modules/postcss-color-mod-function",
+        "//:node_modules/postcss-import",
+        "//:node_modules/postcss-mixins",
+        "//:node_modules/postcss-nested",
+        "//:node_modules/postcss-preset-env",
+        "//:node_modules/postcss-url",
+    ],
+    bazel_sandbox_plugin = False,  # the postcss plugin seems to break the sandbox
+    config = "postcss.mjs",
+    entry_point = "src/css/style.css",
+    minify = True,
+    output_dir = True,
+)

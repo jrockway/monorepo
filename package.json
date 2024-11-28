@@ -3,6 +3,14 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "@bazel/ibazel": "^0.25.0"
+    "@deanc/esbuild-plugin-postcss": "^1.0.2",
+    "cssnano": "^7.0.6",
+    "postcss": "^8.4.49",
+    "postcss-color-mod-function": "^4.1.1",
+    "postcss-import": "^16.1.0",
+    "postcss-mixins": "^11.0.3",
+    "postcss-nested": "^7.0.2",
+    "postcss-preset-env": "^10.1.1",
+    "postcss-url": "^10.1.3"
   }
 }

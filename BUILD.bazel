@@ -150,6 +150,8 @@ alias(
     actual = "@nodejs//:node",
 )
 
+# pnpm
+# example: bazel run -- @pnpm//:pnpm --dir $PWD add postcss -D
 alias(
     name = "pnpm",
     actual = "@pnpm//:pnpm",
