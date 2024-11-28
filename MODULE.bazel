@@ -3,17 +3,17 @@ module(
     repo_name = "com_github_jrockway_monorepo",
 )
 
+bazel_dep(name = "aspect_rules_js", version = "2.1.1")
 bazel_dep(name = "gazelle", version = "0.40.0")
 bazel_dep(name = "rules_go", version = "0.50.1")
+bazel_dep(name = "rules_nodejs", version = "6.3.2")
 
 bazel_dep(name = "buildifier_prebuilt", version = "7.3.1", dev_dependency = True)
 
+# go
 go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
 go_sdk.nogo(nogo = "//:nogo")
-go_sdk.download(
-    name = "go_sdk",
-    version = "1.23.3",
-)
+go_sdk.download(name = "go_sdk", version = "1.23.3")
 use_repo(go_sdk, "go_sdk")
 
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
@@ -34,3 +34,20 @@ use_repo(
     "com_github_tomarrell_wrapcheck_v2",
     "org_golang_x_tools",
 )
+
+# javascript
+node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node", dev_dependency = True)
+node.toolchain(name = "nodejs", node_version_from_nvmrc = "//:.nvmrc")
+use_repo(node, "nodejs")
+
+pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm", dev_dependency = True)
+use_repo(pnpm, "pnpm")
+
+npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm", dev_dependency = True)
+npm.npm_translate_lock(
+    name = "npm",
+    pnpm_lock = "//:pnpm-lock.yaml",
+    verify_node_modules_ignored = "//:.bazelignore",
+    npmrc = "//:.npmrc",
+)
+use_repo(npm, "npm")

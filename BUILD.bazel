@@ -1,5 +1,6 @@
 load("@buildifier_prebuilt//:rules.bzl", "buildifier", "buildifier_test", "buildozer_binary")
 load("@gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@rules_go//go:def.bzl", "nogo")
 load("//internal/analyzers/staticcheck:def.bzl", "all_staticcheck_analyzers")  # buildifier: disable=bzl-visibility
 
@@ -135,4 +136,21 @@ test_suite(
     tests = [
         ":buildifier_test",
     ],
+)
+
+alias(
+    name = "go",
+    actual = "@rules_go//go",
+)
+
+npm_link_all_packages(name = "node_modules")
+
+alias(
+    name = "node",
+    actual = "@nodejs//:node",
+)
+
+alias(
+    name = "pnpm",
+    actual = "@pnpm//:pnpm",
 )
