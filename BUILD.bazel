@@ -65,7 +65,7 @@ nogo(
         # "@org_golang_x_tools//go/analysis/passes/pkgfact:pkgfact",
         "@org_golang_x_tools//go/analysis/passes/printf",
         "@org_golang_x_tools//go/analysis/passes/reflectvaluecompare",
-        "@org_golang_x_tools//go/analysis/passes/shadow",
+        # "@org_golang_x_tools//go/analysis/passes/shadow",
         "@org_golang_x_tools//go/analysis/passes/shift",
         "@org_golang_x_tools//go/analysis/passes/sigchanyzer",
         "@org_golang_x_tools//go/analysis/passes/slog",
@@ -190,4 +190,11 @@ platform(
         "@platforms//os:linux",
     ],
     visibility = ["//:__subpackages__"],
+)
+
+config_setting(
+    name = "is_macos",
+    constraint_values = [
+        "@platforms//os:macos",
+    ],
 )

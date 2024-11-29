@@ -1,0 +1,15 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "links",
+    srcs = ["links.go"],
+    importpath = "github.com/jrockway/monorepo/internal/links",
+    visibility = ["//:__subpackages__"],
+    deps = ["//internal/errors"],
+)
+
+go_test(
+    name = "links_test",
+    srcs = ["links_test.go"],
+    embed = [":links"],
+)

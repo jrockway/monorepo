@@ -1,0 +1,12 @@
+load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
+
+native_binary(
+    name = "hugo",
+    src = select({
+        "//:is_amd64_linux": "@hugo_amd64_linux//:hugo",
+        "//:is_arm64_linux": "@hugo_arm64_linux//:hugo",
+        "//:is_macos": "@hugo_macos//:hugo",
+    }),
+    out = "hugo",
+    visibility = ["//:__subpackages__"],
+)

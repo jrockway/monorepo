@@ -4,6 +4,20 @@ load("@aspect_rules_esbuild//esbuild:defs.bzl", "esbuild")
 load("@rules_oci//oci:defs.bzl", "oci_image", "oci_image_index", "oci_load", "oci_push")
 load("//internal/oci:transition.bzl", "multi_arch")
 
+genrule(
+    name = "site_tar",
+    srcs = glob([
+        "archetypes/**",
+        "content/**",
+        "layouts/**",
+        "resources/**",
+        "static/**",
+    ]) + ["config.yaml"],
+    outs = ["site.tar.zst"],
+    cmd = "$(location //internal/run_hugo) -out $@ -cd www.jrock.us",
+    tools = ["//internal/run_hugo"],
+)
+
 esbuild(
     name = "assets",
     srcs = glob([
@@ -74,6 +88,7 @@ oci_image(
     labels = "annotations",
     tars = [
         "assets_tar",
+        "site_tar",
     ],
 )
 
@@ -97,6 +112,5 @@ oci_push(
     name = "push_www",
     image = "www",
     remote_tags = "tags",
-    # repository = "registry.digitalocean.com/jrockus/www",
-    repository = "docker.io/jrockway/www",
+    repository = "registry.digitalocean.com/jrockus/www",
 )

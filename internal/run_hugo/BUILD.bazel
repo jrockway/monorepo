@@ -1,0 +1,24 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "run_hugo_lib",
+    srcs = ["main.go"],
+    data = ["//tools/hugo"],
+    importpath = "github.com/jrockway/monorepo/internal/run_hugo",
+    visibility = ["//visibility:private"],
+    x_defs = {
+        "hugo": "$(rlocationpath //tools/hugo)",
+    },
+    deps = [
+        "//internal/errors",
+        "//internal/links",
+        "@com_github_klauspost_compress//zstd",
+        "@rules_go//go/runfiles",
+    ],
+)
+
+go_binary(
+    name = "run_hugo",
+    embed = [":run_hugo_lib"],
+    visibility = ["//:__subpackages__"],
+)
