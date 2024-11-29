@@ -1,3 +1,4 @@
+startup --digest_function=BLAKE3
 build --workspace_status_command=$(pwd)/workspace_status.sh
 build --incompatible_strict_action_env=true
 
