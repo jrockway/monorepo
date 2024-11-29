@@ -1,0 +1,4 @@
+exports_files(
+    ["transition.bzl"],
+    visibility = ["//:__subpackages__"],
+)

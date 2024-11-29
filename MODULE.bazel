@@ -3,11 +3,13 @@ module(
     repo_name = "com_github_jrockway_monorepo",
 )
 
+bazel_dep(name = "aspect_bazel_lib", version = "2.9.4")
 bazel_dep(name = "aspect_rules_esbuild", version = "0.21.0")
 bazel_dep(name = "aspect_rules_js", version = "2.1.1")
 bazel_dep(name = "gazelle", version = "0.40.0")
 bazel_dep(name = "rules_go", version = "0.50.1")
 bazel_dep(name = "rules_nodejs", version = "6.3.2")
+bazel_dep(name = "rules_oci", version = "2.0.1")
 
 bazel_dep(name = "buildifier_prebuilt", version = "7.3.1", dev_dependency = True)
 
@@ -58,3 +60,17 @@ npm.npm_translate_lock(
     verify_node_modules_ignored = "//:.bazelignore",
 )
 use_repo(npm, "npm")
+
+# oci
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+oci.pull(
+    name = "nginx",
+    digest = "sha256:0c86dddac19f2ce4fd716ac58c0fd87bf69bfd4edabfd6971fb885bafd12a00b",
+    image = "docker.io/library/nginx",
+    platforms = [
+        "linux/amd64",
+        "linux/arm64/v8",
+    ],
+    tag = "1.27.3",
+)
+use_repo(oci, "nginx", "nginx_linux_amd64", "nginx_linux_arm64_v8")

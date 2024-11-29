@@ -1,7 +1,11 @@
+load("@aspect_bazel_lib//lib:expand_template.bzl", "expand_template")
+load("@aspect_bazel_lib//lib:tar.bzl", "mtree_mutate", "mtree_spec", "tar")
 load("@aspect_rules_esbuild//esbuild:defs.bzl", "esbuild")
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_image_index", "oci_load", "oci_push")
+load("//internal/oci:transition.bzl", "multi_arch")
 
 esbuild(
-    name = "style",
+    name = "assets",
     srcs = glob([
         "src/css/**",
         "src/fonts/**",
@@ -20,4 +24,79 @@ esbuild(
     entry_point = "src/css/style.css",
     minify = True,
     output_dir = True,
+)
+
+mtree_spec(
+    name = "assets_raw_mtree",
+    srcs = ["assets"],
+)
+
+mtree_mutate(
+    name = "assets_mtree",
+    awk_script = "mutate_assets_mtree.awk",
+    mtree = "assets_raw_mtree",
+)
+
+tar(
+    name = "assets_tar",
+    srcs = ["assets"],
+    compress = "zstd",
+    mtree = "assets_mtree",
+)
+
+expand_template(
+    name = "annotations",
+    out = "_annotations.txt",
+    stamp_substitutions = {
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX": "{{COMMIT_SHA}}",
+    },
+    template = [
+        "name=www.jrock.us",
+        "version=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    ],
+)
+
+expand_template(
+    name = "tags",
+    out = "_tags.txt",
+    stamp_substitutions = {
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX": "{{COMMIT_SHA}}",
+    },
+    template = [
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    ],
+)
+
+oci_image(
+    name = "www_image",
+    annotations = "annotations",
+    base = "@nginx",
+    labels = "annotations",
+    tars = [
+        "assets_tar",
+    ],
+)
+
+multi_arch(
+    name = "www_multiarch",
+    image = "www_image",
+)
+
+oci_image_index(
+    name = "www",
+    images = ["www_multiarch"],
+)
+
+oci_load(
+    name = "load_www",
+    image = "www_image",
+    repo_tags = ["registry.digitalocean.com/jrockus/www:latest"],
+)
+
+oci_push(
+    name = "push_www",
+    image = "www",
+    remote_tags = "tags",
+    # repository = "registry.digitalocean.com/jrockus/www",
+    repository = "docker.io/jrockway/www",
 )
