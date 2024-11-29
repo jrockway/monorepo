@@ -6,7 +6,6 @@ def _deps_impl(_ctx):
     """https://github.com/gohugoio/hugo/releases"""
     build_file_content = """exports_files(["hugo"])
     """
-    print(build_file_content)
     http_archive(
         name = "hugo_amd64_linux",
         url = "https://github.com/gohugoio/hugo/releases/download/v0.139.2/hugo_0.139.2_linux-amd64.tar.gz",

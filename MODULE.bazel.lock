@@ -116,7 +116,7 @@
   "moduleExtensions": {
     "//tools/hugo:extensions.bzl%hugo": {
       "general": {
-        "bzlTransitiveDigest": "Y9ctsf5Pm/qHnCu4PH+766NGK8xn09AaU7FtpENbTiQ=",
+        "bzlTransitiveDigest": "CESe2oYVx/AO+O2JaYMD3VMVKzdhes3iDlFuCFyN4mo=",
         "usagesDigest": "jzSPwxtDW5fnj2rdGc3mznSrHcf6Ztygn1iqYFE0SII=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
