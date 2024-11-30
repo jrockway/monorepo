@@ -3,6 +3,7 @@ module github.com/jrockway/monorepo
 go 1.23.0
 
 require (
+	code.cloudfoundry.org/lager v2.0.0+incompatible
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.0
 	github.com/adrg/xdg v0.5.3
 	github.com/alingse/asasalint v0.0.11
@@ -15,9 +16,15 @@ require (
 	github.com/golangci/gofmt v0.0.0-20240816233607-d8596aa466a9
 	github.com/google/go-cmp v0.6.0
 	github.com/gordonklaus/ineffassign v0.1.0
+	github.com/itchyny/gojq v0.12.13
 	github.com/jackc/pgx/v4 v4.18.3
+	github.com/jessevdk/go-flags v1.6.1
+	github.com/joonix/log v0.0.0-20230221083239-7988383bab32
 	github.com/kisielk/errcheck v1.8.0
 	github.com/klauspost/compress v1.17.11
+	github.com/logrusorgru/aurora/v3 v3.0.0
+	github.com/mattn/go-colorable v0.1.13
+	github.com/mattn/go-isatty v0.0.20
 	github.com/nishanths/exhaustive v0.12.0
 	github.com/pkg/errors v0.9.1
 	github.com/satori/go.uuid v1.2.1-0.20181028125025-b2ce2384e17b
@@ -29,7 +36,7 @@ require (
 	golang.org/x/exp v0.0.0-20240314144324-c7f7c6466f7f
 	golang.org/x/tools v0.27.0
 	google.golang.org/grpc v1.64.1
-	google.golang.org/protobuf v1.34.2
+	google.golang.org/protobuf v1.35.1
 	honnef.co/go/tools v0.5.1
 	k8s.io/api v0.31.3
 	k8s.io/klog/v2 v2.130.1
@@ -43,7 +50,9 @@ require (
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gofrs/uuid v4.2.0+incompatible // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
+	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
+	github.com/itchyny/timefmt-go v0.1.6 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.14.3 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
@@ -53,10 +62,10 @@ require (
 	github.com/jackc/pgtype v1.14.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/lib/pq v1.10.7 // indirect
-	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/onsi/ginkgo v1.16.5 // indirect
+	github.com/onsi/gomega v1.36.0 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
@@ -67,6 +76,7 @@ require (
 	golang.org/x/sync v0.9.0 // indirect
 	golang.org/x/sys v0.27.0 // indirect
 	golang.org/x/text v0.20.0 // indirect
+	google.golang.org/genproto v0.0.0-20230216225411-c8e22ba71e44 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	k8s.io/apimachinery v0.31.3 // indirect

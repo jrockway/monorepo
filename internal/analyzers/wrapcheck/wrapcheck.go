@@ -11,6 +11,8 @@ var Analyzer *analysis.Analyzer
 func init() {
 	cfg := wrapcheck.NewDefaultConfig()
 	cfg.IgnoreSigs = []string{
+		"errors.New",
+		"fmt.Errorf",
 		"github.com/jrockway/monorepo/internal/errors.Errorf",
 		"github.com/jrockway/monorepo/internal/errors.New",
 		"github.com/jrockway/monorepo/internal/errors.Unwrap",

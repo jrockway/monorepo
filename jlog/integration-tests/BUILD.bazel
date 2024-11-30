@@ -1,0 +1,16 @@
+load("@rules_go//go:def.bzl", "go_test")
+
+go_test(
+    name = "integration-tests_test",
+    srcs = ["loggers_test.go"],
+    deps = [
+        "//jlog/pkg/parse",
+        "@com_github_google_go_cmp//cmp",
+        "@com_github_joonix_log//:log",
+        "@com_github_logrusorgru_aurora_v3//:aurora",
+        "@com_github_sirupsen_logrus//:logrus",
+        "@org_cloudfoundry_code_lager//:lager",
+        "@org_uber_go_zap//:zap",
+        "@org_uber_go_zap//zapcore",
+    ],
+)

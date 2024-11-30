@@ -1,0 +1,39 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "parse",
+    srcs = [
+        "context.go",
+        "default_formats.go",
+        "default_parsers.go",
+        "filter.go",
+        "parse.go",
+    ],
+    importpath = "github.com/jrockway/monorepo/jlog/pkg/parse",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_itchyny_gojq//:gojq",
+        "@com_github_logrusorgru_aurora_v3//:aurora",
+    ],
+)
+
+go_test(
+    name = "parse_test",
+    srcs = [
+        "context_test.go",
+        "default_formats_test.go",
+        "default_parsers_test.go",
+        "filter_test.go",
+        "parse_fuzz_test.go",
+        "parse_test.go",
+    ],
+    data = glob(["testdata/**"]),
+    embed = [":parse"],
+    deps = [
+        "//jlog/pkg/parse/internal/fuzzsupport",
+        "@com_github_google_go_cmp//cmp",
+        "@com_github_google_go_cmp//cmp/cmpopts",
+        "@com_github_logrusorgru_aurora_v3//:aurora",
+        "@org_uber_go_zap//zapcore",
+    ],
+)

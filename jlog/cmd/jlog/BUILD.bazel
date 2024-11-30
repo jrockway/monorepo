@@ -1,0 +1,20 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "jlog_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/jrockway/monorepo/jlog/cmd/jlog",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//jlog/cmd/internal/jlog",
+        "//jlog/pkg/parse",
+        "@com_github_jessevdk_go_flags//:go-flags",
+        "@com_github_mattn_go_colorable//:go-colorable",
+    ],
+)
+
+go_binary(
+    name = "jlog",
+    embed = [":jlog_lib"],
+    visibility = ["//visibility:public"],
+)

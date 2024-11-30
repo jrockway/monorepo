@@ -13,6 +13,7 @@ func init() {
 		// Avoid flagging os.Stdout/os.Stderr writes; other files should be checked, but the
 		// codebase expects this to not be a lint error right now.
 		"(*os.File).Write",
+		"(*os.File).WriteString",
 		"fmt.Fprintf",
 		"fmt.Fprintln",
 		"fmt.Fprint",

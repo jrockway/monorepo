@@ -1,0 +1,23 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "jlog",
+    srcs = ["jlog.go"],
+    importpath = "github.com/jrockway/monorepo/jlog/cmd/internal/jlog",
+    visibility = ["//jlog/cmd:__subpackages__"],
+    deps = [
+        "//jlog/pkg/parse",
+        "@com_github_logrusorgru_aurora_v3//:aurora",
+        "@com_github_mattn_go_isatty//:go-isatty",
+    ],
+)
+
+go_test(
+    name = "jlog_test",
+    srcs = ["jlog_test.go"],
+    embed = [":jlog"],
+    deps = [
+        "//jlog/pkg/parse",
+        "@com_github_jessevdk_go_flags//:go-flags",
+    ],
+)

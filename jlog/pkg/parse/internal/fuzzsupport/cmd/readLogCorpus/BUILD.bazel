@@ -1,0 +1,18 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "readLogCorpus_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/jrockway/monorepo/jlog/pkg/parse/internal/fuzzsupport/cmd/readLogCorpus",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//internal/errors",
+        "//jlog/pkg/parse/internal/fuzzsupport",
+    ],
+)
+
+go_binary(
+    name = "readLogCorpus",
+    embed = [":readLogCorpus_lib"],
+    visibility = ["//jlog/pkg/parse:__subpackages__"],
+)
