@@ -1,6 +1,8 @@
 startup --digest_function=BLAKE3
 startup --host_jvm_args=-DBAZEL_TRACK_SOURCE_DIRECTORIES=1
 
+common --verbose_failures
+common --worker_sandboxing
 common --test_env=GO_TEST_WRAP_TESTV=1 # This makes go tests run in -v mode.
 
 build --workspace_status_command=$(pwd)/workspace_status.sh
@@ -14,9 +16,15 @@ build:remotecache --experimental_remote_cache_compression --experimental_remote_
 build:remotecache --noslim_profile --experimental_profile_include_target_label --experimental_profile_include_primary_output
 build:remotecache --nolegacy_important_outputs
 build:remotecache --build_metadata=REPO_URL=https://github.com/jrockway/monorepo.git
+
 build:remote --define=EXECUTOR=remote
 build:remote --remote_executor=grpcs://remote.buildbuddy.io
 build:remote --remote_timeout=3600
+
+common --enable_platform_specific_config
+build:linux --sandbox_add_mount_pair=/tmp
+build:macos --sandbox_add_mount_pair=/var/tmp
+build:windows --sandbox_add_mount_pair=C:\Temp
 
 # local modifications should take priority
 try-import %workspace%/.bazelrc.local
