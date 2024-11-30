@@ -1,4 +1,8 @@
 startup --digest_function=BLAKE3
+startup --host_jvm_args=-DBAZEL_TRACK_SOURCE_DIRECTORIES=1
+
+common --test_env=GO_TEST_WRAP_TESTV=1 # This makes go tests run in -v mode.
+
 build --workspace_status_command=$(pwd)/workspace_status.sh
 build --incompatible_strict_action_env=true
 
