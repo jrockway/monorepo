@@ -1299,11 +1299,23 @@
     "@@rules_oci+//oci:extensions.bzl%oci": {
       "general": {
         "bzlTransitiveDigest": "av5BsJa5CVW12jEwNVIjKv7uei6KxbnuxLuxji3puHU=",
-        "usagesDigest": "ZDg+qG0d6cdmJVFgYcJODydTUTpjUNjbtQjHH3FrL0E=",
+        "usagesDigest": "iZZQ8RyI2CeN9uCiRsaQkjyJbD2S3auQ4kecAPrT3w0=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
         "generatedRepoSpecs": {
+          "nginx_linux_386": {
+            "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
+            "attributes": {
+              "scheme": "https",
+              "registry": "index.docker.io",
+              "repository": "library/nginx",
+              "identifier": "sha256:0c86dddac19f2ce4fd716ac58c0fd87bf69bfd4edabfd6971fb885bafd12a00b",
+              "platform": "linux/386",
+              "target_name": "nginx_linux_386",
+              "bazel_tags": []
+            }
+          },
           "nginx_linux_amd64": {
             "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
             "attributes": {
@@ -1313,6 +1325,30 @@
               "identifier": "sha256:0c86dddac19f2ce4fd716ac58c0fd87bf69bfd4edabfd6971fb885bafd12a00b",
               "platform": "linux/amd64",
               "target_name": "nginx_linux_amd64",
+              "bazel_tags": []
+            }
+          },
+          "nginx_linux_arm_v5": {
+            "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
+            "attributes": {
+              "scheme": "https",
+              "registry": "index.docker.io",
+              "repository": "library/nginx",
+              "identifier": "sha256:0c86dddac19f2ce4fd716ac58c0fd87bf69bfd4edabfd6971fb885bafd12a00b",
+              "platform": "linux/arm/v5",
+              "target_name": "nginx_linux_arm_v5",
+              "bazel_tags": []
+            }
+          },
+          "nginx_linux_arm_v7": {
+            "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
+            "attributes": {
+              "scheme": "https",
+              "registry": "index.docker.io",
+              "repository": "library/nginx",
+              "identifier": "sha256:0c86dddac19f2ce4fd716ac58c0fd87bf69bfd4edabfd6971fb885bafd12a00b",
+              "platform": "linux/arm/v7",
+              "target_name": "nginx_linux_arm_v7",
               "bazel_tags": []
             }
           },
@@ -1328,6 +1364,42 @@
               "bazel_tags": []
             }
           },
+          "nginx_linux_mips64le": {
+            "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
+            "attributes": {
+              "scheme": "https",
+              "registry": "index.docker.io",
+              "repository": "library/nginx",
+              "identifier": "sha256:0c86dddac19f2ce4fd716ac58c0fd87bf69bfd4edabfd6971fb885bafd12a00b",
+              "platform": "linux/mips64le",
+              "target_name": "nginx_linux_mips64le",
+              "bazel_tags": []
+            }
+          },
+          "nginx_linux_ppc64le": {
+            "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
+            "attributes": {
+              "scheme": "https",
+              "registry": "index.docker.io",
+              "repository": "library/nginx",
+              "identifier": "sha256:0c86dddac19f2ce4fd716ac58c0fd87bf69bfd4edabfd6971fb885bafd12a00b",
+              "platform": "linux/ppc64le",
+              "target_name": "nginx_linux_ppc64le",
+              "bazel_tags": []
+            }
+          },
+          "nginx_linux_s390x": {
+            "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
+            "attributes": {
+              "scheme": "https",
+              "registry": "index.docker.io",
+              "repository": "library/nginx",
+              "identifier": "sha256:0c86dddac19f2ce4fd716ac58c0fd87bf69bfd4edabfd6971fb885bafd12a00b",
+              "platform": "linux/s390x",
+              "target_name": "nginx_linux_s390x",
+              "bazel_tags": []
+            }
+          },
           "nginx": {
             "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_alias",
             "attributes": {
@@ -1337,10 +1409,94 @@
               "repository": "library/nginx",
               "identifier": "sha256:0c86dddac19f2ce4fd716ac58c0fd87bf69bfd4edabfd6971fb885bafd12a00b",
               "platforms": {
+                "@@platforms//cpu:i386": "@nginx_linux_386",
                 "@@platforms//cpu:x86_64": "@nginx_linux_amd64",
-                "@@platforms//cpu:arm64": "@nginx_linux_arm64_v8"
+                "@@platforms//cpu:armv7": "@nginx_linux_arm_v7",
+                "@@platforms//cpu:arm64": "@nginx_linux_arm64_v8",
+                "@@platforms//cpu:mips64": "@nginx_linux_mips64le",
+                "@@platforms//cpu:ppc": "@nginx_linux_ppc64le",
+                "@@platforms//cpu:s390x": "@nginx_linux_s390x"
               },
               "bzlmod_repository": "nginx",
+              "reproducible": true
+            }
+          },
+          "distroless_linux_amd64": {
+            "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
+            "attributes": {
+              "scheme": "https",
+              "registry": "gcr.io",
+              "repository": "distroless/base-debian12",
+              "identifier": "sha256:6d4a4f40e93615df1677463ca56456379cc3a4e2359308c9e72bc60ffc4a12a9",
+              "platform": "linux/amd64",
+              "target_name": "distroless_linux_amd64",
+              "bazel_tags": []
+            }
+          },
+          "distroless_linux_arm_v7": {
+            "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
+            "attributes": {
+              "scheme": "https",
+              "registry": "gcr.io",
+              "repository": "distroless/base-debian12",
+              "identifier": "sha256:6d4a4f40e93615df1677463ca56456379cc3a4e2359308c9e72bc60ffc4a12a9",
+              "platform": "linux/arm/v7",
+              "target_name": "distroless_linux_arm_v7",
+              "bazel_tags": []
+            }
+          },
+          "distroless_linux_arm64_v8": {
+            "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
+            "attributes": {
+              "scheme": "https",
+              "registry": "gcr.io",
+              "repository": "distroless/base-debian12",
+              "identifier": "sha256:6d4a4f40e93615df1677463ca56456379cc3a4e2359308c9e72bc60ffc4a12a9",
+              "platform": "linux/arm64/v8",
+              "target_name": "distroless_linux_arm64_v8",
+              "bazel_tags": []
+            }
+          },
+          "distroless_linux_ppc64le": {
+            "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
+            "attributes": {
+              "scheme": "https",
+              "registry": "gcr.io",
+              "repository": "distroless/base-debian12",
+              "identifier": "sha256:6d4a4f40e93615df1677463ca56456379cc3a4e2359308c9e72bc60ffc4a12a9",
+              "platform": "linux/ppc64le",
+              "target_name": "distroless_linux_ppc64le",
+              "bazel_tags": []
+            }
+          },
+          "distroless_linux_s390x": {
+            "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_pull",
+            "attributes": {
+              "scheme": "https",
+              "registry": "gcr.io",
+              "repository": "distroless/base-debian12",
+              "identifier": "sha256:6d4a4f40e93615df1677463ca56456379cc3a4e2359308c9e72bc60ffc4a12a9",
+              "platform": "linux/s390x",
+              "target_name": "distroless_linux_s390x",
+              "bazel_tags": []
+            }
+          },
+          "distroless": {
+            "repoRuleId": "@@rules_oci+//oci/private:pull.bzl%oci_alias",
+            "attributes": {
+              "target_name": "distroless",
+              "scheme": "https",
+              "registry": "gcr.io",
+              "repository": "distroless/base-debian12",
+              "identifier": "sha256:6d4a4f40e93615df1677463ca56456379cc3a4e2359308c9e72bc60ffc4a12a9",
+              "platforms": {
+                "@@platforms//cpu:x86_64": "@distroless_linux_amd64",
+                "@@platforms//cpu:armv7": "@distroless_linux_arm_v7",
+                "@@platforms//cpu:arm64": "@distroless_linux_arm64_v8",
+                "@@platforms//cpu:ppc": "@distroless_linux_ppc64le",
+                "@@platforms//cpu:s390x": "@distroless_linux_s390x"
+              },
+              "bzlmod_repository": "distroless",
               "reproducible": true
             }
           },
@@ -1690,8 +1846,20 @@
         "moduleExtensionMetadata": {
           "explicitRootModuleDirectDeps": [
             "nginx",
+            "nginx_linux_386",
             "nginx_linux_amd64",
-            "nginx_linux_arm64_v8"
+            "nginx_linux_arm_v5",
+            "nginx_linux_arm_v7",
+            "nginx_linux_arm64_v8",
+            "nginx_linux_mips64le",
+            "nginx_linux_ppc64le",
+            "nginx_linux_s390x",
+            "distroless",
+            "distroless_linux_amd64",
+            "distroless_linux_arm_v7",
+            "distroless_linux_arm64_v8",
+            "distroless_linux_ppc64le",
+            "distroless_linux_s390x"
           ],
           "explicitRootModuleDirectDevDeps": [],
           "useAllRepos": "NO",

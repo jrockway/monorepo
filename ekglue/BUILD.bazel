@@ -1,0 +1,72 @@
+load("@aspect_bazel_lib//lib:expand_template.bzl", "expand_template")
+load("@aspect_bazel_lib//lib:tar.bzl", "tar")
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_image_index", "oci_load", "oci_push")
+load("//internal/oci:transition.bzl", "multi_arch")
+
+# TODO(jrockway): This should only build for linux, otherwise //ekglue:load on macos builds a
+# macos binary into a linux container.
+
+tar(
+    name = "ekglue_tar",
+    srcs = ["//ekglue/cmd/ekglue"],
+    compress = "zstd",
+    mtree = ["bin/ekglue uid=65532 gid=65532 time=1672560000 mode=0755 type=file content=$(location //ekglue/cmd/ekglue)"],
+)
+
+expand_template(
+    name = "annotations",
+    out = "_annotations.txt",
+    stamp_substitutions = {
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX": "{{EKGLUE_VERSION}}",
+    },
+    template = [
+        "name=ekglue",
+        "version=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    ],
+)
+
+expand_template(
+    name = "tags",
+    out = "_tags.txt",
+    stamp_substitutions = {
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX": "{{EKGLUE_VERSION}}",
+    },
+    template = [
+        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    ],
+)
+
+oci_image(
+    name = "ekglue_image",
+    annotations = "annotations",
+    base = "@distroless",
+    cmd = ["/bin/ekglue"],
+    labels = "annotations",
+    tars = [
+        "ekglue_tar",
+    ],
+    user = "65532:65532",
+)
+
+multi_arch(
+    name = "ekglue_multiarch",
+    image = "ekglue_image",
+)
+
+oci_image_index(
+    name = "ekglue_index",
+    images = ["ekglue_multiarch"],
+)
+
+oci_load(
+    name = "load",
+    image = "ekglue_image",
+    repo_tags = ["registry.digitalocean.com/jrockus/ekglue:latest"],
+)
+
+oci_push(
+    name = "push",
+    image = "ekglue_index",
+    remote_tags = "tags",
+    repository = "registry.digitalocean.com/jrockus/ekglue",
+)

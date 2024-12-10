@@ -23,4 +23,7 @@ go_binary(
     name = "ekglue",
     embed = [":ekglue_lib"],
     visibility = ["//visibility:public"],
+    x_defs = {
+        "github.com/jrockway/monorepo/opinionated-server/server.AppVersion": "{EKGLUE_VERSION}",
+    },
 )

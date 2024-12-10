@@ -133,12 +133,31 @@ oci.pull(
     digest = "sha256:0c86dddac19f2ce4fd716ac58c0fd87bf69bfd4edabfd6971fb885bafd12a00b",
     image = "docker.io/library/nginx",
     platforms = [
+        "linux/386",
         "linux/amd64",
+        "linux/arm/v5",
+        "linux/arm/v7",
         "linux/arm64/v8",
+        "linux/mips64le",
+        "linux/ppc64le",
+        "linux/s390x",
     ],
     tag = "1.27.3",
 )
-use_repo(oci, "nginx", "nginx_linux_amd64", "nginx_linux_arm64_v8")
+oci.pull(
+    name = "distroless",
+    digest = "sha256:6d4a4f40e93615df1677463ca56456379cc3a4e2359308c9e72bc60ffc4a12a9",
+    image = "gcr.io/distroless/base-debian12",
+    platforms = [
+        "linux/amd64",
+        "linux/arm/v7",
+        "linux/arm64/v8",
+        "linux/ppc64le",
+        "linux/s390x",
+    ],
+    tag = "nonroot",
+)
+use_repo(oci, "distroless", "distroless_linux_amd64", "distroless_linux_arm64_v8", "distroless_linux_arm_v7", "distroless_linux_ppc64le", "distroless_linux_s390x", "nginx", "nginx_linux_386", "nginx_linux_amd64", "nginx_linux_arm64_v8", "nginx_linux_arm_v5", "nginx_linux_arm_v7", "nginx_linux_mips64le", "nginx_linux_ppc64le", "nginx_linux_s390x")
 
 # hugo
 hugo = use_extension("//tools/hugo:extensions.bzl", "hugo")
