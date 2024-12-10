@@ -1,0 +1,117 @@
+syntax = "proto3";
+package types;
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/jrockway/jsso2/pkg/types";
+
+// User represents something that can log in.
+message User {
+    int64 id = 1;
+    string username = 2;
+    google.protobuf.Timestamp created_at = 3;
+    google.protobuf.Timestamp disabled_at = 4;
+}
+
+// SessionMetadata stores extra information about a session.  Extra information
+// isn't used by JSSO itself, but might be useful for audit logs, evaluating
+// policy rules, etc.
+message SessionMetadata {
+    string ip_address = 1;
+    string user_agent = 2;
+    string revocation_reason = 3;
+}
+
+// Session links a token (the id) and a user.  If expires_at is less than or
+// equal to the current time, the session is expired.
+message Session {
+    bytes id = 1;
+    User user = 2;
+    SessionMetadata metadata = 3;
+    google.protobuf.Timestamp created_at = 4;
+    google.protobuf.Timestamp expires_at = 5;
+    repeated string taints = 6;
+}
+
+// Credential represents a WebAuthn public-key credential.
+message Credential {
+    // A synthetic identifier to distingish between cases where a credential is
+    // revoked and re-added, or two users have the same credential.
+    int64 id = 1;
+
+    // The id of the credential, as determined by the authenticator.
+    bytes credential_id = 2;
+
+    // The public key of the credential, used to verify signataures from an
+    // authenticator.
+    bytes public_key = 3;
+
+    // The user that enrolled this credential.
+    User user = 4;
+
+    // The name that the user gave this; for display purposes only.
+    string name = 5;
+
+    // When this credential was enrolled.
+    google.protobuf.Timestamp created_at = 6;
+
+    // When this credential was revoked, or zero if not revoked.
+    google.protobuf.Timestamp deleted_at = 7;
+
+    // The session id that was in use to access the enrollment page.  We don't
+    // use this anywhere, it's just for audit purposes.  (That's why it's just
+    // the ID and not the full Session object.)
+    bytes created_by_session_id = 8;
+
+    // The AAGUID of the authenticator.  (Supposedly this identifies the
+    // manufacturer of the authenticator.)
+    bytes aaguid = 9;
+
+    // The last-seen sign count of the authenticator.  If the sign count is less
+    // than this when logging in, we know the credential has been cloned.
+    int64 sign_count = 10;
+}
+
+message SecureToken {
+    // We use an Any here because it includes the type of the message.  This
+    // means that when we sign one of these tokens, we also sign the type of the
+    // token, ensuring that validation does not succeed on the wrong type of
+    // message.
+    google.protobuf.Any message = 1;
+
+    // When this token was created.
+    google.protobuf.Timestamp issued_at = 2;
+}
+
+// SetCookieRequest is a request to set a session cookie.  It's intended to be
+// wrapped in a SecureToken, so that a gRPC request can return a token and it
+// can be passed to a regular HTTP service that sets an HttpOnly cookie.
+message SetCookieRequest {
+    // The session ID to set.
+    bytes session_id = 1;
+    // Where to redirect after setting the cookie.
+    string redirect_url = 2;
+    // When the session cookie should expire.
+    google.protobuf.Timestamp session_expires_at = 3;
+}
+
+// Header is an HTTP header.
+message Header {
+    string key = 1;
+    string value = 2;
+}
+
+// BearerToken is information authenticating a single request.  It's intended to
+// be wrapped in a SecureToken.
+message BearerToken {
+    string username = 1;
+    string request_id = 2;
+}
+
+// RedirectToken is a request to redirect to a new URI.  It is issued when
+// authentication fails to allow the user to immediately go to their original
+// destination after they log in, without allowing arbitrary sites on the
+// Internet to trick you into visiting them.
+message RedirectToken {
+    string uri = 1;
+}

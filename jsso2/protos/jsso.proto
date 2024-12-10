@@ -1,0 +1,167 @@
+syntax = "proto3";
+package jsso;
+import "types.proto";
+import "webauthn.proto";
+
+option go_package = "github.com/jrockway/jsso2/pkg/jssopb";
+
+// Service User manages user accounts.
+service User {
+    // Edit adds a new user if the ID is 0, or updates an existing user.
+    rpc Edit(EditUserRequest) returns (EditUserReply) {
+    }
+    // GenerateEnrollmentLink generates an enrollment token for the user.
+    rpc GenerateEnrollmentLink(GenerateEnrollmentLinkRequest)
+        returns (GenerateEnrollmentLinkReply) {
+    }
+    // WhoAmI returns the user object associated with the current session.  When
+    // called without a session, a null current user is returned rather than an
+    // error.
+    rpc WhoAmI(WhoAmIRequest) returns (WhoAmIReply) {
+    }
+}
+
+// Service session manages sessions.
+service Session {
+    // AuthorizeHTTP authorizes an incoming HTTP request, returning a
+    // request-scoped bearer token to authenticate the request to upstream
+    // systems.  A "deny" authorization decision will not be transmitted as a
+    // gRPC error; a gRPC error like PermissionDenied means that the caller is
+    // not authorized to call AuthorizeHTTP, not that the HTTP request is
+    // unauthorized.  (Corollary: an OK response code does not mean the request
+    // is authorized.)
+    rpc AuthorizeHTTP(AuthorizeHTTPRequest) returns (AuthorizeHTTPReply) {
+    }
+}
+
+// Service Login manages the WebAuthn login ceremony.
+service Login {
+    rpc Start(StartLoginRequest) returns (StartLoginReply) {
+    }
+    rpc Finish(FinishLoginRequest) returns (FinishLoginReply) {
+    }
+}
+
+// Service Enrollment manages the WebAuthn enrollment ceremony.
+service Enrollment {
+    rpc Start(StartEnrollmentRequest) returns (StartEnrollmentReply) {
+    }
+    rpc Finish(FinishEnrollmentRequest) returns (FinishEnrollmentReply) {
+    }
+}
+
+message EditUserRequest {
+    types.User user = 1;
+}
+
+message EditUserReply {
+    types.User user = 1;
+}
+
+message GenerateEnrollmentLinkRequest {
+    types.User target = 1;
+}
+
+message GenerateEnrollmentLinkReply {
+    string url = 1;
+    string token = 2;
+}
+
+message StartLoginRequest {
+    string username = 1;
+}
+message StartLoginReply {
+    webauthn.PublicKeyCredentialRequestOptions credential_request_options = 1;
+    string token = 2;
+}
+
+message FinishLoginRequest {
+    webauthn.PublicKeyCredential credential = 1;
+    string error = 2;
+    string redirect_token = 3;
+}
+message FinishLoginReply {
+    string redirect_url = 1;
+}
+
+message StartEnrollmentRequest {
+}
+
+message StartEnrollmentReply {
+    types.User user = 1;
+    webauthn.PublicKeyCredentialCreationOptions credential_creation_options = 2;
+}
+
+message FinishEnrollmentRequest {
+    webauthn.PublicKeyCredential credential = 1;
+    string name = 2;
+}
+
+message FinishEnrollmentReply {
+    string login_url = 1;
+}
+
+message WhoAmIRequest {
+}
+message WhoAmIReply {
+    types.User user = 1;
+}
+
+// AuthorizeHTTPRequest is a request from an authenticating proxy to authorize
+// one HTTP request.
+message AuthorizeHTTPRequest {
+    // The method of this request.
+    string request_method = 1;
+    // The URI that this request is attempting to access.
+    string request_uri = 2;
+    // The x-request-id header for this request.
+    string request_id = 3;
+    // The value of the "Authorization" HTTP header.
+    repeated string authorization_headers = 4;
+    // Any cookies included with this request.
+    repeated string cookies = 5;
+    // The IP address of the user making this request.
+    string ip_address = 6;
+}
+
+// Allow allows a request through the proxy.
+message Allow {
+    string username = 1;
+    repeated string groups = 2;
+    // A signed and encrypted token allowing the upstream application to
+    // authorize this request without contacting an external system.  It is
+    // scoped to this request and has a short duration, so capturing this token
+    // only provides limited authenticated access.  This token is included here
+    // for non-proxying API clients; the actual authorization header to pass
+    // upstream is included in add_headers or append_headers fields below.
+    string bearer_token = 3;
+    // Headers to replace when sending the request upstream.  If Authorization
+    // or Cookie are unset, they should be cleared.
+    repeated types.Header add_headers = 4;
+}
+
+// Deny denies a request through the proxy.  An HTTP response can be included to
+// inform the end-user as to what went wrong.  (More likely, it will be a
+// temporary redirect to a login page.)
+message Deny {
+    string reason = 1;
+    message Redirect {
+        string redirect_url = 1;
+    }
+    message Response {
+        string content_type = 1;
+        string body = 2;
+    }
+    oneof destination {
+        Redirect redirect = 2;
+        Response response = 3;
+    }
+}
+
+// AuthorizeHTTPReply contains the authorization decision.
+message AuthorizeHTTPReply {
+    oneof decision {
+        Allow allow = 1;
+        Deny deny = 2;
+    }
+}

@@ -1,0 +1,3 @@
+pkg/types/*.pb.go linguist-generated
+pkg/*pb/*.pb.go linguist-generated
+src/protos/* linguist-generated
