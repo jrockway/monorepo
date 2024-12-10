@@ -67,21 +67,31 @@ type InputSchema struct {
 	UpgradeKeys []string
 }
 
+// Buffer is an object for writing output to.  Buffers passed to Emit and OutputFormatter functions
+// should be ones that can't error.  I thought about writing wrappers for the two intended
+// implementors of this interface (bytes.Buffer and zap's buffer.Buffer) to "prove" to these
+// functions that the buffer operations can't return an error, but it adds overhead that I don't
+// care for.
+type Buffer interface {
+	io.Writer
+	io.StringWriter
+}
+
 // OutputFormatter describes an object that actually does the output formatting.  Methods take a
 // bytes.Buffer so they can output incrementally as with an io.Writer, but without worrying about
 // write errors or short writes.
 type OutputFormatter interface {
 	// FormatTime is a function that formats a time.Time and outputs it to an io.Writer.
-	FormatTime(s *State, t time.Time, w *bytes.Buffer)
+	FormatTime(s *State, t time.Time, w Buffer)
 
 	// FormatLevel is a function that formats a log level and outputs it to an io.Writer.
-	FormatLevel(s *State, lvl Level, w *bytes.Buffer)
+	FormatLevel(s *State, lvl Level, w Buffer)
 
 	// FormatMessage is a function that formats a log message and outputs it to an io.Writer.
-	FormatMessage(s *State, msg string, highlight bool, w *bytes.Buffer)
+	FormatMessage(s *State, msg string, highlight bool, w Buffer)
 
 	// FormatField is a function that formats a (key, value) pair and outputs it to an io.Writer.
-	FormatField(s *State, k string, v interface{}, w *bytes.Buffer)
+	FormatField(s *State, k string, v interface{}, w Buffer)
 }
 
 // State keeps state between log lines.
@@ -500,10 +510,10 @@ func (s *InputSchema) ReadLine(l *line) error {
 }
 
 // Emit emits a formatted line to the provided buffer.  Emit must not mutate line.
-func (s *OutputSchema) Emit(l *line, w *bytes.Buffer) {
+func (s *OutputSchema) Emit(l *line, w Buffer) {
 	// Is this a line separating unrelated contexts?  If so, print a separator and do nothing else.
 	if l.isSeparator {
-		w.WriteString("---\n")
+		w.WriteString("---\n") //nolint:errcheck
 		return
 	}
 
@@ -512,13 +522,13 @@ func (s *OutputSchema) Emit(l *line, w *bytes.Buffer) {
 	// Level.
 	if !s.noLevel {
 		s.Formatter.FormatLevel(&s.state, l.lvl, w)
-		w.WriteString(" ")
+		w.WriteString(" ") //nolint:errcheck
 	}
 
 	// Time.
 	if !s.noTime {
 		s.Formatter.FormatTime(&s.state, l.time, w)
-		w.WriteString(" ")
+		w.WriteString(" ") //nolint:errcheck
 	}
 
 	// Message.
@@ -530,7 +540,7 @@ func (s *OutputSchema) Emit(l *line, w *bytes.Buffer) {
 	seenFieldsThisIteration := make(map[string]struct{})
 	write := func(k string, v interface{}) {
 		if needSpace {
-			w.WriteString(" ")
+			w.WriteString(" ") //nolint:errcheck
 		}
 		seenFieldsThisIteration[k] = struct{}{}
 		delete(l.fields, k)
@@ -572,5 +582,5 @@ func (s *OutputSchema) Emit(l *line, w *bytes.Buffer) {
 	}
 
 	// Final newline is our responsibility.
-	w.WriteString("\n")
+	w.WriteString("\n") //nolint:errcheck
 }

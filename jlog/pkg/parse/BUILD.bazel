@@ -6,14 +6,18 @@ go_library(
         "context.go",
         "default_formats.go",
         "default_parsers.go",
+        "encoder.go",
         "filter.go",
         "parse.go",
     ],
     importpath = "github.com/jrockway/monorepo/jlog/pkg/parse",
     visibility = ["//visibility:public"],
     deps = [
+        "//internal/errors",
         "@com_github_itchyny_gojq//:gojq",
         "@com_github_logrusorgru_aurora_v3//:aurora",
+        "@org_uber_go_zap//buffer",
+        "@org_uber_go_zap//zapcore",
     ],
 )
 
@@ -23,6 +27,7 @@ go_test(
         "context_test.go",
         "default_formats_test.go",
         "default_parsers_test.go",
+        "encoder_test.go",
         "filter_test.go",
         "parse_fuzz_test.go",
         "parse_test.go",
@@ -34,6 +39,7 @@ go_test(
         "@com_github_google_go_cmp//cmp",
         "@com_github_google_go_cmp//cmp/cmpopts",
         "@com_github_logrusorgru_aurora_v3//:aurora",
+        "@org_uber_go_zap//:zap",
         "@org_uber_go_zap//zapcore",
     ],
 )

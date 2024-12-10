@@ -42,7 +42,7 @@ var (
 	programStartTime = time.Now()
 )
 
-func (f *DefaultOutputFormatter) FormatTime(s *State, t time.Time, w *bytes.Buffer) {
+func (f *DefaultOutputFormatter) FormatTime(s *State, t time.Time, w Buffer) {
 	var out string
 	switch {
 	case t.IsZero():
@@ -84,7 +84,7 @@ func (f *DefaultOutputFormatter) FormatTime(s *State, t time.Time, w *bytes.Buff
 	if l := utf8.RuneCountInString(out); l > s.timePadding {
 		s.timePadding = l
 	}
-	w.WriteString(f.Aurora.Green(out).String())
+	w.WriteString(f.Aurora.Green(out).String()) //nolint:errcheck
 	s.lastTime = t
 }
 
@@ -94,15 +94,15 @@ func cleanupNewlines(msg string) string {
 	return msg
 }
 
-func (f *DefaultOutputFormatter) FormatMessage(s *State, msg string, highlight bool, w *bytes.Buffer) {
+func (f *DefaultOutputFormatter) FormatMessage(s *State, msg string, highlight bool, w Buffer) {
 	msg = cleanupNewlines(msg)
 	if highlight {
 		msg = f.Aurora.Inverse(msg).String()
 	}
-	w.WriteString(msg)
+	w.WriteString(msg) //nolint:errcheck
 }
 
-func (f *DefaultOutputFormatter) FormatLevel(s *State, level Level, w *bytes.Buffer) {
+func (f *DefaultOutputFormatter) FormatLevel(s *State, level Level, w Buffer) {
 	var l aurora.Value
 	switch level {
 	case LevelTrace:
@@ -124,21 +124,21 @@ func (f *DefaultOutputFormatter) FormatLevel(s *State, level Level, w *bytes.Buf
 	default:
 		l = f.Aurora.Gray(15, "UNK  ")
 	}
-	w.WriteString(l.String())
+	w.WriteString(l.String()) //nolint:errcheck
 }
 
-func (f *DefaultOutputFormatter) FormatField(s *State, k string, v interface{}, w *bytes.Buffer) {
+func (f *DefaultOutputFormatter) FormatField(s *State, k string, v interface{}, w Buffer) {
 	var highlight bool
 	if f.HighlightFields != nil {
 		_, highlight = f.HighlightFields[k]
 	}
 
 	if highlight {
-		w.WriteString(f.Aurora.Yellow(k).String())
+		w.WriteString(f.Aurora.Yellow(k).String()) //nolint:errcheck
 	} else {
-		w.WriteString(f.Aurora.Gray(16, k).String())
+		w.WriteString(f.Aurora.Gray(16, k).String()) //nolint:errcheck
 	}
-	w.WriteString(f.Aurora.Gray(16, ":").String())
+	w.WriteString(f.Aurora.Gray(16, ":").String()) //nolint:errcheck
 
 	var value []byte
 	switch x := v.(type) {
@@ -162,5 +162,5 @@ func (f *DefaultOutputFormatter) FormatField(s *State, k string, v interface{}, 
 		}
 	}
 
-	w.Write(value)
+	w.Write(value) //nolint:errcheck
 }

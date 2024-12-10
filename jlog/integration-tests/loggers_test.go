@@ -23,15 +23,15 @@ type ignoreTimeFormatter struct {
 	i int
 }
 
-func (f *ignoreTimeFormatter) FormatTime(s *parse.State, t time.Time, w *bytes.Buffer) {
+func (f *ignoreTimeFormatter) FormatTime(s *parse.State, t time.Time, w parse.Buffer) {
 	f.i++
-	w.WriteString(strconv.Itoa(f.i))
+	w.WriteString(strconv.Itoa(f.i)) //nolint:errcheck
 	// Check that the time is in some plausible range.  These could be very close to time.Now(),
 	// but for Bunyan we hard-coded some times that get farther into the past every day.
 	if t.After(time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)) && t.Before(time.Date(2030, 1, 1, 0, 0, 0, 0, time.UTC)) {
-		w.WriteString(" ok")
+		w.WriteString(" ok") //nolint:errcheck
 	} else {
-		w.WriteString(" fail")
+		w.WriteString(" fail") //nolint:errcheck
 	}
 }
 

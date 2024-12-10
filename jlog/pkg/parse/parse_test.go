@@ -466,17 +466,17 @@ var (
 	panicFieldValue = "panic"
 )
 
-func (f *testFormatter) FormatTime(s *State, t time.Time, w *bytes.Buffer) {
+func (f *testFormatter) FormatTime(s *State, t time.Time, w Buffer) {
 	switch t {
 	case panicTime:
 		panic("panic")
 	case time.Time{}:
-		w.WriteString("{TS:∅}")
+		w.WriteString("{TS:∅}") //nolint:errcheck
 	default:
 		fmt.Fprintf(w, "{TS:%d}", t.Unix())
 	}
 }
-func (f *testFormatter) FormatLevel(s *State, l Level, w *bytes.Buffer) {
+func (f *testFormatter) FormatLevel(s *State, l Level, w Buffer) {
 	if l == LevelPanic {
 		panic("panic")
 	}
@@ -493,7 +493,7 @@ func (f *testFormatter) FormatLevel(s *State, l Level, w *bytes.Buffer) {
 	}
 	fmt.Fprintf(w, "{LVL:%s}", lvl)
 }
-func (f *testFormatter) FormatMessage(s *State, msg string, highlight bool, w *bytes.Buffer) {
+func (f *testFormatter) FormatMessage(s *State, msg string, highlight bool, w Buffer) {
 	if msg == panicMessage {
 		panic("panic")
 	}
@@ -502,7 +502,7 @@ func (f *testFormatter) FormatMessage(s *State, msg string, highlight bool, w *b
 	}
 	fmt.Fprintf(w, "{MSG:%s}", msg)
 }
-func (f *testFormatter) FormatField(s *State, k string, v interface{}, w *bytes.Buffer) {
+func (f *testFormatter) FormatField(s *State, k string, v interface{}, w Buffer) {
 	if str, ok := v.(string); ok {
 		if str == panicFieldValue {
 			panic("panic")
