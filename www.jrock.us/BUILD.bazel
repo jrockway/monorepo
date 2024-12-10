@@ -6,7 +6,7 @@ load("//internal/oci:transition.bzl", "multi_arch")
 load("//internal/platforms:any.bzl", "platform_independent_output")
 
 genrule(
-    name = "_site_tar",
+    name = "site_raw_tar",
     srcs = glob([
         "archetypes/**",
         "content/**",
@@ -20,7 +20,7 @@ genrule(
 
 platform_independent_output(
     name = "site_tar",
-    src = "_site_tar",
+    src = "site_raw_tar",
 )
 
 esbuild(
@@ -57,10 +57,15 @@ mtree_mutate(
 )
 
 tar(
-    name = "assets_tar",
+    name = "assets_raw_tar",
     srcs = ["assets"],
     compress = "zstd",
     mtree = "assets_mtree",
+)
+
+platform_independent_output(
+    name = "assets_tar",
+    src = "assets_raw_tar",
 )
 
 expand_template(
