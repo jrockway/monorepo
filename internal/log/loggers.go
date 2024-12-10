@@ -13,6 +13,8 @@ import (
 	"github.com/adrg/xdg"
 	"github.com/fatih/color"
 	"github.com/go-logr/zapr"
+	"github.com/jrockway/monorepo/jlog/pkg/parse"
+	"github.com/mattn/go-isatty"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"go.uber.org/zap/zapgrpc"
@@ -169,8 +171,13 @@ func init() {
 
 // InitLogger creates a new global zap logger suitable for use in prodcution.
 func InitLogger() {
-	enc := zapcore.NewJSONEncoder(productionEncoder)
-	makeLoggerOnce(enc, os.Stderr, true, []zap.Option{zap.AddCaller()})
+	if isatty.IsTerminal(os.Stderr.Fd()) {
+		enc := parse.NewJlogEncoder(productionEncoder, parse.ZapEncoderConfig{})
+		makeLoggerOnce(enc, os.Stderr, true, []zap.Option{zap.AddCaller()})
+	} else {
+		enc := zapcore.NewJSONEncoder(productionEncoder)
+		makeLoggerOnce(enc, os.Stderr, true, []zap.Option{zap.AddCaller()})
+	}
 }
 
 // InitBatchLogger creates a new logger for command-line tools that need to retain their logs on
