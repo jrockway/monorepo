@@ -3,9 +3,10 @@ load("@aspect_bazel_lib//lib:tar.bzl", "mtree_mutate", "mtree_spec", "tar")
 load("@aspect_rules_esbuild//esbuild:defs.bzl", "esbuild")
 load("@rules_oci//oci:defs.bzl", "oci_image", "oci_image_index", "oci_load", "oci_push")
 load("//internal/oci:transition.bzl", "multi_arch")
+load("//internal/platforms:any.bzl", "platform_independent_output")
 
 genrule(
-    name = "site_tar",
+    name = "_site_tar",
     srcs = glob([
         "archetypes/**",
         "content/**",
@@ -15,6 +16,11 @@ genrule(
     outs = ["site.tar.zst"],
     cmd = "$(location //internal/run_hugo) -out $@ -cd www.jrock.us",
     tools = ["//internal/run_hugo"],
+)
+
+platform_independent_output(
+    name = "site_tar",
+    src = "_site_tar",
 )
 
 esbuild(
