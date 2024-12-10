@@ -10,7 +10,6 @@ genrule(
         "archetypes/**",
         "content/**",
         "layouts/**",
-        "resources/**",
         "static/**",
     ]) + ["config.yaml"],
     outs = ["site.tar.zst"],
