@@ -11,7 +11,7 @@ import (
 	envoy_config_endpoint_v3 "github.com/envoyproxy/go-control-plane/envoy/config/endpoint/v3"
 	envoy_type_v3 "github.com/envoyproxy/go-control-plane/envoy/type/v3"
 	"github.com/google/go-cmp/cmp"
-	"github.com/jrockway/ekglue/pkg/cds"
+	"github.com/jrockway/monorepo/ekglue/pkg/cds"
 	"google.golang.org/protobuf/testing/protocmp"
 	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
@@ -527,7 +527,7 @@ func TestLoadAssignmentFromEndpoints(t *testing.T) {
 				"failure-domain.beta.kubernetes.io/zone":   "region0-zone0",
 			},
 		},
-	})
+	}) //nolint:errcheck
 	nodes.Add(&v1.Node{
 		TypeMeta: metav1.TypeMeta{
 			APIVersion: "v1",
@@ -542,7 +542,7 @@ func TestLoadAssignmentFromEndpoints(t *testing.T) {
 				"failure-domain.beta.kubernetes.io/zone":   "region0-zone0",
 			},
 		},
-	})
+	}) //nolint:errcheck
 
 	for _, test := range testData {
 		t.Run(test.name, func(t *testing.T) {
@@ -664,7 +664,7 @@ func TestLocality(t *testing.T) {
 				"failure-domain.beta.kubernetes.io/zone":   "region0-zone0",
 			},
 		},
-	})
+	}) //nolint:errcheck
 
 	for i, test := range testData {
 		got := test.localityConfig.LocalityFromHost(nodes, test.input)
@@ -690,7 +690,7 @@ func TestLocalitiesAsYAML(t *testing.T) {
 				"failure-domain.beta.kubernetes.io/zone":   "region0-zone0",
 			},
 		},
-	})
+	}) //nolint:errcheck
 	l := &LocalityConfig{
 		RegionFrom: &Field{
 			Label: "topology.kubernetes.io/region",

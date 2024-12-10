@@ -1,0 +1,35 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "k8s",
+    srcs = ["k8s.go"],
+    importpath = "github.com/jrockway/monorepo/ekglue/pkg/k8s",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//opinionated-server/client",
+        "@io_k8s_api//core/v1:core",
+        "@io_k8s_api//discovery/v1:discovery",
+        "@io_k8s_apimachinery//pkg/apis/meta/v1:meta",
+        "@io_k8s_apimachinery//pkg/fields",
+        "@io_k8s_client_go//kubernetes",
+        "@io_k8s_client_go//rest",
+        "@io_k8s_client_go//tools/cache",
+        "@io_k8s_client_go//tools/clientcmd",
+    ],
+)
+
+go_test(
+    name = "k8s_test",
+    srcs = ["k8s_test.go"],
+    embed = [":k8s"],
+    deps = [
+        "@com_github_google_go_cmp//cmp",
+        "@io_k8s_api//core/v1:core",
+        "@io_k8s_api//discovery/v1:discovery",
+        "@io_k8s_apimachinery//pkg/apis/meta/v1:meta",
+        "@io_k8s_apimachinery//pkg/runtime",
+        "@io_k8s_apimachinery//pkg/watch",
+        "@io_k8s_client_go//rest",
+        "@io_k8s_client_go//tools/cache",
+    ],
+)

@@ -112,7 +112,7 @@ func TestWatchers(t *testing.T) {
 	}{
 		{
 			run: func(ctx context.Context, cw *ClusterWatcher, s cache.Store) {
-				cw.WatchNodes(ctx, s)
+				cw.WatchNodes(ctx, s) //nolint:errcheck
 			},
 			list: &v1.NodeList{},
 			add: []runtime.Object{
@@ -126,7 +126,7 @@ func TestWatchers(t *testing.T) {
 		},
 		{
 			run: func(ctx context.Context, cw *ClusterWatcher, s cache.Store) {
-				cw.WatchServices(ctx, s)
+				cw.WatchServices(ctx, s) //nolint:errcheck
 			},
 			list: &v1.NodeList{},
 			add: []runtime.Object{
@@ -141,7 +141,7 @@ func TestWatchers(t *testing.T) {
 		},
 		{
 			run: func(ctx context.Context, cw *ClusterWatcher, s cache.Store) {
-				cw.WatchEndpointSlices(ctx, s)
+				cw.WatchEndpointSlices(ctx, s) //nolint:errcheck
 			},
 			list: &v1.NodeList{},
 			add: []runtime.Object{

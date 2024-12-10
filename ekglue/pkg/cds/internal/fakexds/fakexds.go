@@ -1,3 +1,4 @@
+// Package fakexds implements a fake XDS client.
 package fakexds
 
 import (
@@ -31,7 +32,7 @@ func (s *Stream) Send(res *discovery_v3.DiscoveryResponse) error {
 	ctx := s.Context()
 	select {
 	case <-ctx.Done():
-		return ctx.Err()
+		return ctx.Err() //nolint:wrapcheck
 	case s.resCh <- res:
 		return nil
 	}
@@ -42,7 +43,7 @@ func (s *Stream) Recv() (*discovery_v3.DiscoveryRequest, error) {
 	ctx := s.Context()
 	select {
 	case <-ctx.Done():
-		return nil, ctx.Err()
+		return nil, ctx.Err() //nolint:wrapcheck
 	case req := <-s.reqCh:
 		return req, nil
 	}

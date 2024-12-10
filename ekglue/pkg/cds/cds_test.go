@@ -15,8 +15,8 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zaptest"
 
-	"github.com/jrockway/ekglue/pkg/cds/internal/fakexds"
-	"github.com/jrockway/ekglue/pkg/xds"
+	"github.com/jrockway/monorepo/ekglue/pkg/cds/internal/fakexds"
+	"github.com/jrockway/monorepo/ekglue/pkg/xds"
 	"google.golang.org/genproto/googleapis/rpc/status"
 )
 
@@ -37,7 +37,7 @@ func clustersFromResponse(res *discovery_v3.DiscoveryResponse) ([]string, error)
 	for _, a := range res.GetResources() {
 		cluster := new(envoy_config_cluster_v3.Cluster)
 		if err := a.UnmarshalTo(cluster); err != nil {
-			return nil, err
+			return nil, err //nolint:wrapcheck
 		}
 		result = append(result, cluster.GetName())
 	}

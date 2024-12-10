@@ -3,7 +3,7 @@ package config
 import (
 	"testing"
 
-	"github.com/jrockway/ekglue/pkg/glue"
+	"github.com/jrockway/monorepo/ekglue/pkg/glue"
 )
 
 func TestConfig(t *testing.T) {

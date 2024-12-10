@@ -1,0 +1,12 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "fakexds",
+    srcs = ["fakexds.go"],
+    importpath = "github.com/jrockway/monorepo/ekglue/pkg/cds/internal/fakexds",
+    visibility = ["//ekglue/pkg/cds:__subpackages__"],
+    deps = [
+        "@com_github_envoyproxy_go_control_plane//envoy/service/discovery/v3:discovery",
+        "@org_golang_google_grpc//metadata",
+    ],
+)

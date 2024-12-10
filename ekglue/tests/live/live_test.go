@@ -17,8 +17,8 @@ import (
 	clusterservice "github.com/envoyproxy/go-control-plane/envoy/service/cluster/v3"
 	endpointservice "github.com/envoyproxy/go-control-plane/envoy/service/endpoint/v3"
 	"github.com/grpc-ecosystem/go-grpc-middleware/logging/zap/ctxzap"
-	"github.com/jrockway/ekglue/pkg/cds"
-	"github.com/jrockway/ekglue/pkg/glue"
+	"github.com/jrockway/monorepo/ekglue/pkg/cds"
+	"github.com/jrockway/monorepo/ekglue/pkg/glue"
 	"github.com/miekg/dns"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -189,7 +189,7 @@ func TestXDS(t *testing.T) {
 							Port: int32(addr.Port),
 						}},
 					},
-				})
+				}) //nolint:errcheck
 			},
 		},
 		{
@@ -248,7 +248,7 @@ func TestXDS(t *testing.T) {
 							Protocol:    protocolp(v1.ProtocolTCP),
 						},
 					},
-				})
+				}) //nolint:errcheck
 			},
 		},
 		{
@@ -272,7 +272,7 @@ func TestXDS(t *testing.T) {
 							Port: int32(addr.Port),
 						}},
 					},
-				})
+				}) //nolint:errcheck
 				es.Add(&discoveryv1.EndpointSlice{
 					TypeMeta: metav1.TypeMeta{
 						APIVersion: "v1",
@@ -324,7 +324,7 @@ func TestXDS(t *testing.T) {
 							Protocol:    protocolp(v1.ProtocolTCP),
 						},
 					},
-				})
+				}) //nolint:errcheck
 			},
 		}, {
 			name:       "cds with eds endpoints (reverse order)",
@@ -382,7 +382,7 @@ func TestXDS(t *testing.T) {
 							Protocol:    protocolp(v1.ProtocolTCP),
 						},
 					},
-				})
+				}) //nolint:errcheck
 				cs.Add(&v1.Service{
 					TypeMeta: metav1.TypeMeta{
 						APIVersion: "v1",
@@ -399,7 +399,7 @@ func TestXDS(t *testing.T) {
 							Port: int32(addr.Port),
 						}},
 					},
-				})
+				}) //nolint:errcheck
 			},
 		}, {
 			name:       "cds with v2 eds endpoints (should break)",
@@ -458,7 +458,7 @@ func TestXDS(t *testing.T) {
 							Protocol:    protocolp(v1.ProtocolTCP),
 						},
 					},
-				})
+				}) //nolint:errcheck
 				cs.Add(&v1.Service{
 					TypeMeta: metav1.TypeMeta{
 						APIVersion: "v1",
@@ -475,7 +475,7 @@ func TestXDS(t *testing.T) {
 							Port: int32(addr.Port),
 						}},
 					},
-				})
+				}) //nolint:errcheck
 			},
 		},
 	}
@@ -510,20 +510,20 @@ func TestXDS(t *testing.T) {
 			Hdr: dns.RR_Header{Name: dom, Rrtype: dns.TypeA, Class: dns.ClassINET, Ttl: 1},
 			A:   net.IPv4(127, 0, 0, 1).To4(),
 		})
-		w.WriteMsg(res)
+		w.WriteMsg(res) //nolint:errcheck
 	})
 	d := &dns.Server{
 		Addr: "127.0.0.1:5353",
 		Net:  "tcp",
 	}
-	go d.ListenAndServe()
-	defer d.Shutdown()
+	go d.ListenAndServe() //nolint:errcheck
+	defer d.Shutdown()    //nolint:errcheck
 
 	for _, test := range testData {
 		t.Run(test.name, func(t *testing.T) {
 			// Setup per-test logging.
 			logger := zaptest.NewLogger(t, zaptest.Level(zap.DebugLevel))
-			defer logger.Sync()
+			defer logger.Sync() //nolint:errcheck
 			restoreLogger := zap.ReplaceGlobals(logger)
 			defer restoreLogger()
 
@@ -537,13 +537,13 @@ func TestXDS(t *testing.T) {
 			hs := &http.Server{}
 			hs.Handler = http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 				w.WriteHeader(http.StatusOK)
-				w.Write([]byte("Hello, world!"))
+				w.Write([]byte("Hello, world!")) //nolint:errcheck
 				go func() { gotReqCh <- struct{}{} }()
 			})
-			go hs.Serve(hl)
+			go hs.Serve(hl) //nolint:errcheck
 			defer func() {
-				hs.Close()
-				hl.Close()
+				hs.Close() //nolint:errcheck
+				hl.Close() //nolint:errcheck
 			}()
 
 			// Serve the xDS RPC service, to allow Envoy to discover the server above.
@@ -557,10 +557,10 @@ func TestXDS(t *testing.T) {
 			endpointservice.RegisterEndpointDiscoveryServiceServer(gs, server)
 			envoy_api_v2.RegisterClusterDiscoveryServiceServer(gs, &envoy_api_v2.UnimplementedClusterDiscoveryServiceServer{})
 			envoy_api_v2.RegisterEndpointDiscoveryServiceServer(gs, &envoy_api_v2.UnimplementedEndpointDiscoveryServiceServer{})
-			go gs.Serve(gl)
+			go gs.Serve(gl) //nolint:errcheck
 			defer func() {
 				gs.Stop()
-				gl.Close()
+				gl.Close() //nolint:errcheck
 			}()
 
 			// Start Envoy.
@@ -570,8 +570,8 @@ func TestXDS(t *testing.T) {
 				t.Fatalf("start envoy: %v", err)
 			}
 			defer func() {
-				cmd.Process.Kill()
-				cmd.Wait()
+				cmd.Process.Kill() //nolint:errcheck
+				cmd.Wait()         //nolint:errcheck
 			}()
 
 			// Wait for Envoy to start up.

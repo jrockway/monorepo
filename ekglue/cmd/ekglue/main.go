@@ -5,10 +5,10 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/jrockway/ekglue/pkg/cds"
-	"github.com/jrockway/ekglue/pkg/glue"
-	"github.com/jrockway/ekglue/pkg/k8s"
-	"github.com/jrockway/opinionated-server/server"
+	"github.com/jrockway/monorepo/ekglue/pkg/cds"
+	"github.com/jrockway/monorepo/ekglue/pkg/glue"
+	"github.com/jrockway/monorepo/ekglue/pkg/k8s"
+	"github.com/jrockway/monorepo/opinionated-server/server"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"k8s.io/client-go/tools/cache"
@@ -86,7 +86,7 @@ func main() {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		w.Write(yaml)
+		w.Write(yaml) //nolint:errcheck
 	}))
 	zap.L().Info("pre-filling node store")
 	if err := watcher.ListNodes(ns); err != nil {

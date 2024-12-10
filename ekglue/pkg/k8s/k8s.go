@@ -1,3 +1,4 @@
+// Package k8s contains the parts of k8s necessary to implement ekglue.
 package k8s
 
 import (
@@ -5,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jrockway/opinionated-server/client"
+	"github.com/jrockway/monorepo/opinionated-server/client"
 	v1 "k8s.io/api/core/v1"
 	discoveryv1 "k8s.io/api/discovery/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

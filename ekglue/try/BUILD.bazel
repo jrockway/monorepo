@@ -1,0 +1,26 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "try_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/jrockway/monorepo/ekglue/try",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//ekglue/pkg/cds",
+        "//ekglue/pkg/xds",
+        "//opinionated-server/server",
+        "@com_github_envoyproxy_go_control_plane//envoy/api/v2:api",
+        "@com_github_envoyproxy_go_control_plane//envoy/api/v2/core",
+        "@com_github_envoyproxy_go_control_plane//envoy/api/v2/endpoint",
+        "@com_github_envoyproxy_go_control_plane//envoy/service/cluster/v3:cluster",
+        "@com_github_envoyproxy_go_control_plane//envoy/service/endpoint/v3:endpoint",
+        "@org_golang_google_grpc//:grpc",
+        "@org_uber_go_zap//:zap",
+    ],
+)
+
+go_binary(
+    name = "try",
+    embed = [":try_lib"],
+    visibility = ["//visibility:public"],
+)

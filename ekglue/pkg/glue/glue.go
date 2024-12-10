@@ -21,7 +21,7 @@ import (
 	_ "github.com/envoyproxy/go-control-plane/envoy/extensions/transport_sockets/tls/v3"
 	_ "github.com/envoyproxy/go-control-plane/envoy/extensions/upstreams/http/v3"
 
-	"github.com/jrockway/ekglue/pkg/cds"
+	"github.com/jrockway/monorepo/ekglue/pkg/cds"
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 	"github.com/prometheus/client_golang/prometheus"
@@ -50,7 +50,7 @@ var (
 	)
 )
 
-// A matcher selects a cluster based on the current state of the generated Cluster object, the and
+// Matcher selects a cluster based on the current state of the generated Cluster object, the and
 // Kubernetes service + port that the Cluster is being created for.
 type Matcher struct {
 	// ClusterName matches the mangled name of a cluster (not the original service name).
@@ -200,7 +200,7 @@ func DefaultConfig() *Config {
 func LoadConfig(filename string) (*Config, error) {
 	raw, err := os.ReadFile(filename)
 	if err != nil {
-		return nil, err
+		return nil, err //nolint:wrapcheck
 	}
 	js, err := yaml.YAMLToJSON(raw)
 	if err != nil {
@@ -209,7 +209,7 @@ func LoadConfig(filename string) (*Config, error) {
 
 	cfg := DefaultConfig()
 	if err := json.Unmarshal(js, cfg); err != nil {
-		return nil, err
+		return nil, err //nolint:wrapcheck
 	}
 	// TODO(jrockway): Future versions of this code will have to first unmarshal into a
 	// temporary structure just to read the APIVersion, then call version-specific unmarshalling
@@ -220,7 +220,7 @@ func LoadConfig(filename string) (*Config, error) {
 	return cfg, nil
 }
 
-// Base returns a deep copy of the base cluster configuration.
+// GetBaseConfig returns a deep copy of the base cluster configuration.
 func (c *ClusterConfig) GetBaseConfig() *envoy_config_cluster_v3.Cluster {
 	raw := proto.Clone(c.BaseConfig)
 	cluster, ok := raw.(*envoy_config_cluster_v3.Cluster)
@@ -440,7 +440,7 @@ func (l *LocalityConfig) LocalitiesAsYAML(nodes cache.Store) ([]byte, error) {
 	return localitiesYAML, nil
 }
 
-// LoadAssignmentFromEndpoints translates a Kubernetes endpoints object into a set of Envoy
+// LoadAssignmentsFromEndpointSlices translates a Kubernetes endpoints object into a set of Envoy
 // ClusterLoadAssignments.
 func (c *EndpointConfig) LoadAssignmentsFromEndpointSlices(nodeStore cache.Store, endpointSlices []*discoveryv1.EndpointSlice) []*envoy_config_endpoint_v3.ClusterLoadAssignment {
 	if endpointSlices == nil {

@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/jrockway/ekglue/pkg/cds"
-	"github.com/jrockway/ekglue/pkg/xds"
-	"github.com/jrockway/opinionated-server/server"
+	"github.com/jrockway/monorepo/ekglue/pkg/cds"
+	"github.com/jrockway/monorepo/ekglue/pkg/xds"
+	"github.com/jrockway/monorepo/opinionated-server/server"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 
@@ -60,7 +60,7 @@ func main() {
 		Addr: "0.0.0.0:1234",
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte("fast"))
+			w.Write([]byte("fast")) //nolint:errcheck
 		}),
 	}
 	slow := http.Server{
@@ -68,7 +68,7 @@ func main() {
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 			time.Sleep(time.Second)
 			w.WriteHeader(http.StatusGatewayTimeout)
-			w.Write([]byte("slow"))
+			w.Write([]byte("slow")) //nolint:errcheck
 		}),
 	}
 
@@ -104,7 +104,7 @@ func main() {
 		zap.L().Fatal("error adding endpoints", zap.Error(err))
 	}
 
-	go fast.ListenAndServe()
-	go slow.ListenAndServe()
+	go fast.ListenAndServe() //nolint:errcheck
+	go slow.ListenAndServe() //nolint:errcheck
 	server.ListenAndServe()
 }

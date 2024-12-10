@@ -7,9 +7,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/jrockway/ekglue/pkg/cds"
-	"github.com/jrockway/ekglue/pkg/glue"
-	"github.com/jrockway/ekglue/pkg/k8s"
+	"github.com/jrockway/monorepo/ekglue/pkg/cds"
+	"github.com/jrockway/monorepo/ekglue/pkg/glue"
+	"github.com/jrockway/monorepo/ekglue/pkg/k8s"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/klog"

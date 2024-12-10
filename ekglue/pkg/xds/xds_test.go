@@ -205,7 +205,7 @@ func TestNamedSubscriptions(t *testing.T) {
 	}
 
 	// This won't block, because there are no receivers to notify.
-	m.Add(ctx, []Resource{&envoy_api_v2.ClusterLoadAssignment{ClusterName: "bar"}})
+	m.Add(ctx, []Resource{&envoy_api_v2.ClusterLoadAssignment{ClusterName: "bar"}}) //nolint:errcheck
 	select {
 	case res = <-resCh:
 		t.Fatalf("unexpected recv %v", res)
@@ -215,7 +215,7 @@ func TestNamedSubscriptions(t *testing.T) {
 	}
 
 	// This one will block.
-	go m.Add(ctx, []Resource{&envoy_api_v2.ClusterLoadAssignment{ClusterName: "foo"}})
+	go m.Add(ctx, []Resource{&envoy_api_v2.ClusterLoadAssignment{ClusterName: "foo"}}) //nolint:errcheck
 	select {
 	case res = <-resCh:
 	case <-ctx.Done():

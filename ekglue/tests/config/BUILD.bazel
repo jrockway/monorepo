@@ -1,0 +1,8 @@
+load("@rules_go//go:def.bzl", "go_test")
+
+go_test(
+    name = "config_test",
+    srcs = ["config_test.go"],
+    data = ["ekglue.yaml"],
+    deps = ["//ekglue/pkg/glue"],
+)

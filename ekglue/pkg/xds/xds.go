@@ -1,3 +1,4 @@
+// Package xds implements the XDS protocol.  https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol
 package xds
 
 import (
@@ -216,7 +217,7 @@ func (m *Manager) notify(ctx context.Context, resources []string) error {
 			case <-timer.C: // Don't spend the whole time interval on one slow session.
 			case <-ctx.Done():
 				m.Logger.Error("change notification timed out", zap.Int("sessions_missed", len(blocked)))
-				return ctx.Err()
+				return ctx.Err() //nolint:wrapcheck
 			}
 		}
 	}
@@ -242,7 +243,7 @@ func (m *Manager) Add(ctx context.Context, rs []Resource) error {
 		m.resources[n] = r
 		m.resourcesMu.Unlock()
 	}
-	m.notify(ctx, changed)
+	m.notify(ctx, changed) //nolint:errcheck
 	return nil
 }
 
@@ -274,7 +275,7 @@ func (m *Manager) Replace(ctx context.Context, rs []Resource) error {
 		m.Logger.Info("resource deleted", zap.String("name", n))
 	}
 	m.resourcesMu.Unlock()
-	m.notify(ctx, changed)
+	m.notify(ctx, changed) //nolint:errcheck
 	return nil
 }
 
@@ -285,7 +286,7 @@ func (m *Manager) Delete(ctx context.Context, n string) {
 		delete(m.resources, n)
 		m.Logger.Info("resource deleted", zap.String("name", n))
 		m.resourcesMu.Unlock()
-		m.notify(ctx, []string{n})
+		m.notify(ctx, []string{n}) //nolint:errcheck
 		return
 	}
 	m.resourcesMu.Unlock()
@@ -333,7 +334,7 @@ func (t *tx) MarshalLogObject(enc zapcore.ObjectEncoder) error {
 	enc.AddDuration("age", time.Since(t.start))
 	enc.AddString("nonce", t.nonce)
 	enc.AddString("version", t.version)
-	enc.AddObject("trace", &loggableSpan{t.span})
+	enc.AddObject("trace", &loggableSpan{t.span}) //nolint:errcheck
 	return nil
 }
 
@@ -354,7 +355,7 @@ func (s *loggableSpan) MarshalLogObject(enc zapcore.ObjectEncoder) error {
 
 	c := make(opentracing.TextMapCarrier)
 	if err := s.Tracer().Inject(s.Context(), opentracing.TextMap, c); err != nil {
-		return err
+		return err //nolint:wrapcheck
 	}
 	for k, v := range c {
 		enc.AddString(k, v)
@@ -517,7 +518,7 @@ func (m *Manager) Stream(ctx context.Context, reqCh chan *discovery_v3.Discovery
 		case <-m.Draining:
 			return errors.New("server draining")
 		case <-ctx.Done():
-			return ctx.Err()
+			return ctx.Err() //nolint:wrapcheck
 		case <-cleanupTicker.C:
 			for key, t := range txs {
 				if time.Since(t.start) > time.Minute {
@@ -652,18 +653,18 @@ func (m *Manager) ConfigAsYAML(verbose bool) ([]byte, error) {
 	for _, r := range rs {
 		j, err := jsonm.Marshal(r)
 		if err != nil {
-			return nil, err
+			return nil, err //nolint:wrapcheck
 		}
 		list.Resources = append(list.Resources, []byte(j))
 	}
 	js, err := json.Marshal(list)
 	if err != nil {
-		return nil, err
+		return nil, err //nolint:wrapcheck
 	}
 
 	ya, err := yaml.JSONToYAML([]byte(js))
 	if err != nil {
-		return nil, err
+		return nil, err //nolint:wrapcheck
 	}
 	return ya, nil
 }
@@ -679,5 +680,5 @@ func (m *Manager) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
-	w.Write(ya)
+	w.Write(ya) //nolint:errcheck
 }
