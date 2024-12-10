@@ -1,6 +1,6 @@
 """any.bzl contains a rule for making a rule's output platform-independent."""
 
-def _any_transition_impl(settings, attr):
+def _any_transition_impl(_settings, _attr):
     return {
         "//command_line_option:platforms": ["//:any"],
     }
