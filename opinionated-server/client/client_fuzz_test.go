@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/jrockway/opinionated-server/client/internal/fuzzsupport"
+	"github.com/jrockway/monorepo/opinionated-server/client/internal/fuzzsupport"
 	"go.uber.org/zap/zaptest"
 )
 

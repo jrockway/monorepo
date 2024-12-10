@@ -16,7 +16,7 @@ import (
 	"github.com/felixge/httpsnoop"
 	oldproto "github.com/golang/protobuf/proto" // nolint
 	"github.com/grpc-ecosystem/go-grpc-middleware/logging/zap/ctxzap"
-	"github.com/jrockway/opinionated-server/internal/formatters"
+	"github.com/jrockway/monorepo/opinionated-server/internal/formatters"
 	jaegerzap "github.com/uber/jaeger-client-go/log/zap"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -217,7 +217,7 @@ func (w *wrappedServerStream) SetHeader(md metadata.MD) error {
 		w.header = metadata.Join(w.header, md)
 		w.hMu.Unlock()
 	}
-	return w.stream.SetHeader(md)
+	return w.stream.SetHeader(md) //nolint:wrapcheck
 }
 
 // SendHeader implements grpc.ServerStream.
@@ -230,7 +230,7 @@ func (w *wrappedServerStream) SendHeader(md metadata.MD) error {
 		w.hMu.Unlock()
 	}
 
-	return w.stream.SendHeader(md)
+	return w.stream.SendHeader(md) //nolint:wrapcheck
 }
 
 // SetTrailer implements grpc.ServerStream.
@@ -251,7 +251,7 @@ func (w *wrappedServerStream) RecvMsg(m interface{}) error {
 	} else if w.shouldLog && err != nil && !errors.Is(err, io.EOF) {
 		w.l.Error("incoming grpc receive message failed", zap.Error(err))
 	}
-	return err
+	return err //nolint:wrapcheck
 }
 
 // SendMsg implements grpc.ServerStream.
@@ -259,7 +259,7 @@ func (w *wrappedServerStream) SendMsg(m interface{}) error {
 	if w.shouldLog && logOpts.LogPayloads {
 		w.l.Debug("incoming grpc call sent message", Proto("grpc.outgoing_msg", m))
 	}
-	return w.stream.SendMsg(m)
+	return w.stream.SendMsg(m) //nolint:wrapcheck
 }
 
 func loggingStreamServerInterceptor() grpc.StreamServerInterceptor {

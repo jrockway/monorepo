@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jrockway/opinionated-server/client"
+	"github.com/jrockway/monorepo/opinionated-server/client"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health/grpc_health_v1"
 )
@@ -106,7 +106,7 @@ func TestDefaultServers(t *testing.T) {
 		if got, want := info.HTTPAddress, ""; got != want {
 			t.Errorf("http address:\n  got: %v\n want: %v", got, want)
 		}
-		conn.Close()
+		conn.Close() //nolint:errcheck
 	})
 }
 
@@ -116,7 +116,7 @@ func TestHTTPServer(t *testing.T) {
 		w.Header().Add("content-type", "text/plain")
 		w.Header().Add("x-foo-bar", "baz")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("ok"))
+		w.Write([]byte("ok")) //nolint:errcheck
 	})
 	SetHTTPHandler(mux)
 	defer func() { httpHandler = nil }()
@@ -170,7 +170,7 @@ func TestDrain(t *testing.T) {
 		select {
 		case <-drainCh:
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte("draining"))
+			w.Write([]byte("draining")) //nolint:errcheck
 		case <-ctx.Done():
 			http.Error(w, ctx.Err().Error(), http.StatusRequestTimeout)
 		}

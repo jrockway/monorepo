@@ -17,7 +17,7 @@ import (
 	"github.com/grpc-ecosystem/go-grpc-middleware/logging/zap/ctxzap"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/grpc-ecosystem/grpc-opentracing/go/otgrpc"
-	"github.com/jrockway/opinionated-server/internal/formatters"
+	"github.com/jrockway/monorepo/opinionated-server/internal/formatters"
 	"github.com/opentracing-contrib/go-stdlib/nethttp"
 	"github.com/opentracing/opentracing-go"
 	"github.com/prometheus/client_golang/prometheus"
@@ -133,9 +133,9 @@ func (t *loggingTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 		}
 	}
 	if req.Method == "HEAD" || res == nil {
-		ct.Close()
+		ct.Close() //nolint:errcheck
 	}
-	return res, err
+	return res, err //nolint:wrapcheck
 }
 
 type roundTripperOptions struct {

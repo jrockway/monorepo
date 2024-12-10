@@ -1,3 +1,4 @@
+// Package formatters provides Zap formatters.
 package formatters
 
 import (

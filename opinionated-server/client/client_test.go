@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/opentracing/opentracing-go"
+	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go/config"
 	jaegerzap "github.com/uber/jaeger-client-go/log/zap"
 	"github.com/uber/jaeger-client-go/zipkin"
@@ -62,7 +62,7 @@ func TestWrapRoundTripper(t *testing.T) {
 	}
 	opentracing.SetGlobalTracer(tracer)
 	defer opentracing.SetGlobalTracer(opentracing.NoopTracer{})
-	defer closer.Close()
+	defer closer.Close() //nolint:errcheck
 
 	brt := &boringRoundTripper{}
 

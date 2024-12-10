@@ -20,7 +20,7 @@ import (
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/grpc-ecosystem/grpc-opentracing/go/otgrpc"
 	"github.com/jessevdk/go-flags"
-	"github.com/jrockway/opinionated-server/client"
+	"github.com/jrockway/monorepo/opinionated-server/client"
 	"github.com/opentracing-contrib/go-stdlib/nethttp"
 	"github.com/opentracing/opentracing-go"
 	"github.com/povilasv/prommod"
@@ -146,7 +146,7 @@ func Setup() {
 	if _, err := flagParser.Parse(); err != nil {
 		if ferr, ok := err.(*flags.Error); ok && ferr.Type == flags.ErrHelp {
 			fmt.Fprintf(os.Stderr, "%s version %s\n", AppName, AppVersion)
-			fmt.Fprintf(os.Stderr, ferr.Message)
+			fmt.Fprint(os.Stderr, ferr.Message)
 			os.Exit(2)
 		}
 		fmt.Fprintf(os.Stderr, "flag parsing: %v\n", err)
@@ -157,7 +157,7 @@ func Setup() {
 		zap.L().Fatal("error initializing app", zap.Error(err))
 	}
 	appVersionMetric.WithLabelValues(AppName, AppVersion).Set(1)
-	prometheus.Register(prommod.NewCollector(AppName))
+	prometheus.Register(prommod.NewCollector(AppName)) //nolint:errcheck
 	zap.L().Info("app starting", zap.String("name", AppName), zap.String("version", AppVersion))
 }
 
@@ -267,7 +267,7 @@ func setupDebug() {
 			return
 		}
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(status.String()))
+		w.Write([]byte(status.String())) //nolint:errcheck
 	})
 	debugSetup = true
 }
@@ -280,7 +280,7 @@ func setupClient() {
 
 // AddService registers a gRPC server to be run by the RPC server.  It is intended to be used like:
 //
-//   server.AddService(func (s *grpc.Server) { my_proto.RegisterMyService(s, myImplementation) })
+//	server.AddService(func (s *grpc.Server) { my_proto.RegisterMyService(s, myImplementation) })
 func AddService(cb func(s *grpc.Server)) {
 	serviceHooks = append(serviceHooks, cb)
 }
@@ -312,23 +312,23 @@ func SetStartupCallback(cb func(Info)) {
 //
 // To cancel select statements, share a channel between the drain handler and your event loop:
 //
-// 	drainCh := make(chan struct{})
-// 	server.AddDrainHandler(func() { close(drainCh) })
-// 	...
-// 	server.ListenAndServe()
+//	drainCh := make(chan struct{})
+//	server.AddDrainHandler(func() { close(drainCh) })
+//	...
+//	server.ListenAndServe()
 //
 // Then in some long-lived handler:
 //
-//	for {
-//		select {
-//		case <-drainCh:
-//              	return errors.New("draining")
-//		case <-ctx.Done():
-//              	return ctx.Err()
-//		case <-whatever:
-//			// whatever
+//		for {
+//			select {
+//			case <-drainCh:
+//	             	return errors.New("draining")
+//			case <-ctx.Done():
+//	             	return ctx.Err()
+//			case <-whatever:
+//				// whatever
+//			}
 //		}
-//	}
 func AddDrainHandler(f func()) {
 	drainHandlers = append(drainHandlers, f)
 }
@@ -444,7 +444,7 @@ func listenAndServe(stopCh chan string) error {
 	if err != nil {
 		return fmt.Errorf("listen on debug port: %w", err)
 	}
-	defer debugListener.Close()
+	defer debugListener.Close() //nolint:errcheck
 
 	var grpcListener net.Listener
 	if wantGrpc {
@@ -457,7 +457,7 @@ func listenAndServe(stopCh chan string) error {
 		if err != nil {
 			return fmt.Errorf("listen on grpc port: %w", err)
 		}
-		defer grpcListener.Close()
+		defer grpcListener.Close() //nolint:errcheck
 	}
 
 	var httpListener net.Listener
@@ -467,7 +467,7 @@ func listenAndServe(stopCh chan string) error {
 		if err != nil {
 			return fmt.Errorf("listen on http port: %w", err)
 		}
-		defer httpListener.Close()
+		defer httpListener.Close() //nolint:errcheck
 	}
 
 	doneCh := make(chan error)
@@ -646,8 +646,8 @@ func ListenAndServe() {
 	}
 
 	if flushTraces != nil {
-		flushTraces.Close()
+		flushTraces.Close() //nolint:errcheck
 	}
-	zap.L().Sync()
+	zap.L().Sync()  //nolint:errcheck
 	restoreLogger() // This is why we don't allow ListenAndServe to run twice.  It could probably be fixed.
 }

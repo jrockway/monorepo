@@ -42,11 +42,11 @@ func TestStreamWrapper(t *testing.T) {
 		t.Errorf("start: log count:\n  got: %v\n want: %v", got, want)
 	}
 
-	wrapped.SetHeader(metadata.Pairs("foo", "bar"))
+	wrapped.SetHeader(metadata.Pairs("foo", "bar")) //nolint:errcheck
 	if got, want := obs.Len(), 0; got != want {
 		t.Errorf("after set header: log count:\n  got: %v\n want: %v", got, want)
 	}
-	wrapped.SendHeader(metadata.Pairs("bar", "baz"))
+	wrapped.SendHeader(metadata.Pairs("bar", "baz")) //nolint:errcheck
 	if got, want := obs.Len(), 1; got != want {
 		t.Errorf("after send header: log count:\n  got: %v\n want: %v", got, want)
 	}
@@ -58,12 +58,12 @@ func TestStreamWrapper(t *testing.T) {
 	if got, want := obs.Len(), 1; got != want {
 		t.Errorf("after set trailer: log count:\n got: %v\n want: %v", got, want)
 	}
-	wrapped.RecvMsg(new(emptyMsg))
+	wrapped.RecvMsg(new(emptyMsg)) //nolint:errcheck
 	if got, want := obs.Len(), 2; got != want {
 		t.Errorf("after recvmsg: log count:\n  got: %v\n want: %v", got, want)
 	}
 
-	wrapped.SendMsg(new(emptyMsg))
+	wrapped.SendMsg(new(emptyMsg)) //nolint:errcheck
 	if got, want := obs.Len(), 3; got != want {
 		t.Errorf("after sendmsg: log count:\n  got: %v\n want: %v", got, want)
 	}

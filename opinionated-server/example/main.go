@@ -4,7 +4,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/jrockway/opinionated-server/server"
+	"github.com/jrockway/monorepo/opinionated-server/server"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
@@ -24,7 +24,7 @@ func main() {
 	// Add a "production" http handler.
 	server.SetHTTPHandler(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(f.Message))
+		w.Write([]byte(f.Message)) //nolint:errcheck
 	}))
 
 	// Print a message when the servers are started.  The library does already do this, but this

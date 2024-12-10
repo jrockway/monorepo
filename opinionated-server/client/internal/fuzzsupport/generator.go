@@ -1,3 +1,4 @@
+// Package fuzzsupport implements utilities for generating fuzz test data.
 package fuzzsupport
 
 import (
