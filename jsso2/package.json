@@ -2,7 +2,7 @@
     "name": "jsso2",
     "version": "0.0.0-pre",
     "license": "Apache-2.0",
-    "repository": "https://github.com/jrockway/jsso2",
+    "repository": "https://github.com/jrockway/monorepo/jsso2",
     "scripts": {
         "all": "concurrently -c blue.dim,magenta.dim,green.dim -k npm:backend npm:authz npm:protected npm:envoy npm:dev",
         "all:raw": "concurrently -c blue.dim,magenta.dim,green.dim -k npm:backend:raw npm:authz:raw npm:protected:raw npm:envoy npm:dev",
@@ -22,7 +22,7 @@
         "dev": "rollup -c -w",
         "start": "sirv public --no-clear",
         "test:go": "go test ./... -race",
-        "cover:go": "go test ./... -coverprofile=cover.out -covermode=atomic -coverpkg=github.com/jrockway/jsso2/pkg/... && go tool cover -html cover.out -o coverage.html",
+        "cover:go": "go test ./... -coverprofile=cover.out -covermode=atomic -coverpkg=github.com/jrockway/monorepo/jsso2/pkg/... && go tool cover -html cover.out -o coverage.html",
         "test:ts": "jest",
         "cover:ts": "jest --collectCoverage",
         "test": "concurrently --raw -m 1 npm:test:go npm:test:ts npm:lint",

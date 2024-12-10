@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/jrockway/jsso2/pkg/client"
+	"github.com/jrockway/monorepo/jsso2/pkg/client"
 	"github.com/spf13/cobra"
 )
 

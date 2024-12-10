@@ -5,8 +5,8 @@ import (
 	"time"
 
 	envoy_auth "github.com/envoyproxy/go-control-plane/envoy/service/auth/v3"
-	"github.com/jrockway/jsso2/pkg/client"
-	"github.com/jrockway/jsso2/pkg/envoyauthz"
+	"github.com/jrockway/monorepo/jsso2/pkg/client"
+	"github.com/jrockway/monorepo/jsso2/pkg/envoyauthz"
 	opc "github.com/jrockway/opinionated-server/client"
 	"github.com/jrockway/opinionated-server/server"
 	"go.uber.org/zap"

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v4"
-	"github.com/jrockway/jsso2/pkg/store"
+	"github.com/jrockway/monorepo/jsso2/pkg/store"
 	"github.com/jrockway/opinionated-server/server"
 	"go.uber.org/zap"
 )

@@ -4,11 +4,11 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/jrockway/jsso2/pkg/jssopb"
-	"github.com/jrockway/jsso2/pkg/jtesting"
-	"github.com/jrockway/jsso2/pkg/sessions"
-	"github.com/jrockway/jsso2/pkg/testserver"
-	"github.com/jrockway/jsso2/pkg/types"
+	"github.com/jrockway/monorepo/jsso2/pkg/jssopb"
+	"github.com/jrockway/monorepo/jsso2/pkg/jtesting"
+	"github.com/jrockway/monorepo/jsso2/pkg/sessions"
+	"github.com/jrockway/monorepo/jsso2/pkg/testserver"
+	"github.com/jrockway/monorepo/jsso2/pkg/types"
 	"google.golang.org/grpc/metadata"
 )
 

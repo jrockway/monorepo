@@ -4,12 +4,12 @@ import (
 	"testing"
 
 	gzap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
-	"github.com/jrockway/jsso2/pkg/client"
-	"github.com/jrockway/jsso2/pkg/internalauth"
-	"github.com/jrockway/jsso2/pkg/jsso/cmd"
-	"github.com/jrockway/jsso2/pkg/jssopb"
-	"github.com/jrockway/jsso2/pkg/jtesting"
-	"github.com/jrockway/jsso2/pkg/store"
+	"github.com/jrockway/monorepo/jsso2/pkg/client"
+	"github.com/jrockway/monorepo/jsso2/pkg/internalauth"
+	"github.com/jrockway/monorepo/jsso2/pkg/jsso/cmd"
+	"github.com/jrockway/monorepo/jsso2/pkg/jssopb"
+	"github.com/jrockway/monorepo/jsso2/pkg/jtesting"
+	"github.com/jrockway/monorepo/jsso2/pkg/store"
 	"google.golang.org/grpc"
 )
 

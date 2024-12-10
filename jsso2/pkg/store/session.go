@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/jrockway/jsso2/pkg/sessions"
-	"github.com/jrockway/jsso2/pkg/types"
+	"github.com/jrockway/monorepo/jsso2/pkg/sessions"
+	"github.com/jrockway/monorepo/jsso2/pkg/types"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/timestamppb"

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/jrockway/jsso2/pkg/jtesting"
+	"github.com/jrockway/monorepo/jsso2/pkg/jtesting"
 )
 
 func TestDoTx(t *testing.T) {

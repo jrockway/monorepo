@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/jrockway/jsso2/pkg/jssopb"
+	"github.com/jrockway/monorepo/jsso2/pkg/jssopb"
 	"google.golang.org/grpc"
 )
 

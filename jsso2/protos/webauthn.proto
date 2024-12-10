@@ -2,7 +2,7 @@ syntax = "proto3";
 package webauthn;
 import "google/protobuf/duration.proto";
 
-option go_package = "github.com/jrockway/jsso2/pkg/webauthnpb";
+option go_package = "github.com/jrockway/monorepo/jsso2/pkg/webauthnpb";
 
 // These messages are from the WebAuthn spec.
 // https://www.w3.org/TR/webauthn/

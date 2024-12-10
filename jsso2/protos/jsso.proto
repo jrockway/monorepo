@@ -3,7 +3,7 @@ package jsso;
 import "types.proto";
 import "webauthn.proto";
 
-option go_package = "github.com/jrockway/jsso2/pkg/jssopb";
+option go_package = "github.com/jrockway/monorepo/jsso2/pkg/jssopb";
 
 // Service User manages user accounts.
 service User {

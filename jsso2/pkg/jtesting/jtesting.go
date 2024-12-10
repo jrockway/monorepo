@@ -142,8 +142,8 @@ func Run(t *testing.T, name string, r R, f func(t *testing.T, e *E)) {
 }
 
 var prefixes = []string{
-	"github.com/jrockway/jsso2/pkg/",
-	"github.com/jrockway/jsso2/",
+	"github.com/jrockway/monorepo/jsso2/pkg/",
+	"github.com/jrockway/monorepo/jsso2/",
 }
 
 // newTestDB creates a new test database.

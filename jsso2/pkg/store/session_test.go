@@ -10,9 +10,9 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/jmoiron/sqlx"
-	"github.com/jrockway/jsso2/pkg/jtesting"
-	"github.com/jrockway/jsso2/pkg/sessions"
-	"github.com/jrockway/jsso2/pkg/types"
+	"github.com/jrockway/monorepo/jsso2/pkg/jtesting"
+	"github.com/jrockway/monorepo/jsso2/pkg/sessions"
+	"github.com/jrockway/monorepo/jsso2/pkg/types"
 	"google.golang.org/protobuf/testing/protocmp"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

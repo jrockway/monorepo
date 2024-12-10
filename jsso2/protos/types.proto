@@ -3,7 +3,7 @@ package types;
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/jrockway/jsso2/pkg/types";
+option go_package = "github.com/jrockway/monorepo/jsso2/pkg/types";
 
 // User represents something that can log in.
 message User {

@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/jrockway/jsso2/pkg/tokens"
-	"github.com/jrockway/jsso2/pkg/types"
-	"github.com/jrockway/jsso2/pkg/web"
+	"github.com/jrockway/monorepo/jsso2/pkg/tokens"
+	"github.com/jrockway/monorepo/jsso2/pkg/types"
+	"github.com/jrockway/monorepo/jsso2/pkg/web"
 	"google.golang.org/grpc/metadata"
 )
 

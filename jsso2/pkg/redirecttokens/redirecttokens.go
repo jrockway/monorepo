@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jrockway/jsso2/pkg/tokens"
-	"github.com/jrockway/jsso2/pkg/types"
+	"github.com/jrockway/monorepo/jsso2/pkg/tokens"
+	"github.com/jrockway/monorepo/jsso2/pkg/types"
 )
 
 const RedirectTokenLifetime = 5 * time.Minute

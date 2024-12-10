@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/jrockway/jsso2/pkg/client"
-	"github.com/jrockway/jsso2/pkg/jssopb"
+	"github.com/jrockway/monorepo/jsso2/pkg/client"
+	"github.com/jrockway/monorepo/jsso2/pkg/jssopb"
 	"github.com/olekukonko/tablewriter"
 )
 

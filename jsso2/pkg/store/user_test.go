@@ -3,8 +3,8 @@ package store
 import (
 	"testing"
 
-	"github.com/jrockway/jsso2/pkg/jtesting"
-	"github.com/jrockway/jsso2/pkg/types"
+	"github.com/jrockway/monorepo/jsso2/pkg/jtesting"
+	"github.com/jrockway/monorepo/jsso2/pkg/types"
 )
 
 func TestUpdateUser(t *testing.T) {

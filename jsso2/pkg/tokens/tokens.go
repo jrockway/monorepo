@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jrockway/jsso2/pkg/types"
+	"github.com/jrockway/monorepo/jsso2/pkg/types"
 	"github.com/o1egl/paseto/v2"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"

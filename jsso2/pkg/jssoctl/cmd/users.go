@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/jrockway/jsso2/pkg/jssopb"
-	"github.com/jrockway/jsso2/pkg/types"
+	"github.com/jrockway/monorepo/jsso2/pkg/jssopb"
+	"github.com/jrockway/monorepo/jsso2/pkg/types"
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/encoding/protojson"
 )

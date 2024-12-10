@@ -6,11 +6,11 @@ import (
 
 	"github.com/grpc-ecosystem/go-grpc-middleware/logging/zap/ctxzap"
 	"github.com/jmoiron/sqlx"
-	"github.com/jrockway/jsso2/pkg/internalauth"
-	"github.com/jrockway/jsso2/pkg/jssopb"
-	"github.com/jrockway/jsso2/pkg/sessions"
-	"github.com/jrockway/jsso2/pkg/store"
-	"github.com/jrockway/jsso2/pkg/web"
+	"github.com/jrockway/monorepo/jsso2/pkg/internalauth"
+	"github.com/jrockway/monorepo/jsso2/pkg/jssopb"
+	"github.com/jrockway/monorepo/jsso2/pkg/sessions"
+	"github.com/jrockway/monorepo/jsso2/pkg/store"
+	"github.com/jrockway/monorepo/jsso2/pkg/web"
 )
 
 type Service struct {

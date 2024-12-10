@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/jrockway/jsso2/pkg/jtesting"
-	"github.com/jrockway/jsso2/pkg/sessions"
-	"github.com/jrockway/jsso2/pkg/store"
+	"github.com/jrockway/monorepo/jsso2/pkg/jtesting"
+	"github.com/jrockway/monorepo/jsso2/pkg/sessions"
+	"github.com/jrockway/monorepo/jsso2/pkg/store"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"

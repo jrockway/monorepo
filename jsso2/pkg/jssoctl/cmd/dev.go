@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	"github.com/jrockway/jsso2/pkg/tokens"
+	"github.com/jrockway/monorepo/jsso2/pkg/tokens"
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/encoding/protojson"
 )

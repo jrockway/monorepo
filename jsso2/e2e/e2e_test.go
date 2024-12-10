@@ -11,11 +11,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jrockway/jsso2/pkg/client"
-	"github.com/jrockway/jsso2/pkg/jssopb"
-	"github.com/jrockway/jsso2/pkg/jtesting"
-	"github.com/jrockway/jsso2/pkg/types"
-	"github.com/jrockway/jsso2/pkg/util/zapwriter"
+	"github.com/jrockway/monorepo/jsso2/pkg/client"
+	"github.com/jrockway/monorepo/jsso2/pkg/jssopb"
+	"github.com/jrockway/monorepo/jsso2/pkg/jtesting"
+	"github.com/jrockway/monorepo/jsso2/pkg/types"
+	"github.com/jrockway/monorepo/jsso2/pkg/util/zapwriter"
 	"go.uber.org/zap"
 )
 

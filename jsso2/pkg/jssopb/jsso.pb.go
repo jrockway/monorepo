@@ -8,8 +8,8 @@ package jssopb
 
 import (
 	proto "github.com/golang/protobuf/proto"
-	types "github.com/jrockway/jsso2/pkg/types"
-	webauthnpb "github.com/jrockway/jsso2/pkg/webauthnpb"
+	types "github.com/jrockway/monorepo/jsso2/pkg/types"
+	webauthnpb "github.com/jrockway/monorepo/jsso2/pkg/webauthnpb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
