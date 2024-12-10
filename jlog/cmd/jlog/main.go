@@ -7,7 +7,6 @@ import (
 	"io"
 	"os"
 	"os/signal"
-	"runtime/debug"
 	"runtime/pprof"
 	"strings"
 	"sync/atomic"
@@ -23,19 +22,11 @@ import (
 var (
 	version = "dev"
 	commit  = "none"
-	date    = "unknown"
-	builtBy = "unknown"
 )
 
 func printVersion(w io.Writer) {
 	fmt.Fprintf(w, "jlog - Search and pretty-print your JSON logs.\nMore info: https://github.com/jrockway/json-logs\n")
-	fmt.Fprintf(w, "Version %s (%s) built on %s by %s\n", version, commit, date, builtBy)
-	if buildinfo, ok := debug.ReadBuildInfo(); ok {
-		fmt.Fprintf(w, "    go: %v\n", buildinfo.GoVersion)
-		for _, x := range buildinfo.Settings {
-			fmt.Fprintf(w, "    %v: %v\n", x.Key, x.Value)
-		}
-	}
+	fmt.Fprintf(w, "Version %s (%s)\n", version, commit)
 }
 
 func main() {

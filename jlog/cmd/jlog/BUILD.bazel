@@ -5,6 +5,10 @@ go_library(
     srcs = ["main.go"],
     importpath = "github.com/jrockway/monorepo/jlog/cmd/jlog",
     visibility = ["//visibility:private"],
+    x_defs = {
+        "version": "{JLOG_VERSION}",
+        "commit": "{COMMIT_SHA}",
+    },
     deps = [
         "//jlog/cmd/internal/jlog",
         "//jlog/pkg/parse",
@@ -16,5 +20,6 @@ go_library(
 go_binary(
     name = "jlog",
     embed = [":jlog_lib"],
+    pure = "on",
     visibility = ["//visibility:public"],
 )

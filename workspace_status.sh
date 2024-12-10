@@ -19,3 +19,6 @@ fi
 
 ekglue_version="v0.0.70-pre.g$(git describe --match=ekglue-* --long --always --dirty=".$(git diff HEAD | $SHA256SUM | cut -c 1-10)")"
 echo "EKGLUE_VERSION ${ekglue_version}"
+
+jlog_version="v0.0.8-pre.g$(git describe --match=jlog-* --long --always --dirty=".$(git diff HEAD | $SHA256SUM | cut -c 1-10)")"
+echo "JLOG_VERSION ${jlog_version}"
