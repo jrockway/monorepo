@@ -16,6 +16,7 @@ gazelle_binary(
     languages = [
         "@gazelle//language/go",  # Built-in rule from gazelle for Golang.
         "@gazelle//language/proto",  # Built-in rule from gazelle for Protos.
+        "@bazel_skylib_gazelle_plugin//bzl",
     ],
     visibility = ["//visibility:public"],
 )
@@ -197,4 +198,9 @@ config_setting(
     constraint_values = [
         "@platforms//os:macos",
     ],
+)
+
+platform(
+    name = "any",
+    visibility = ["//:__subpackages__"],
 )

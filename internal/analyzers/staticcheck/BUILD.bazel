@@ -1,3 +1,4 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@rules_go//go:def.bzl", "go_library")
 load(":def.bzl", "ANALYZERS")
 
@@ -34,3 +35,9 @@ go_library(
     )
     for analyzer in ANALYZERS
 ]
+
+bzl_library(
+    name = "def",
+    srcs = ["def.bzl"],
+    visibility = ["//:__subpackages__"],
+)
