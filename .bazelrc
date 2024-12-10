@@ -4,6 +4,7 @@ startup --host_jvm_args=-DBAZEL_TRACK_SOURCE_DIRECTORIES=1
 common --verbose_failures
 common --worker_sandboxing
 common --test_env=GO_TEST_WRAP_TESTV=1 # This makes go tests run in -v mode.
+common --incompatible_autoload_externally="@rules_shell"
 
 build --workspace_status_command=$(pwd)/workspace_status.sh
 build --incompatible_strict_action_env=true
