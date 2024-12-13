@@ -27,6 +27,7 @@ def _deps_impl(_ctx):
     return _ctx.extension_metadata(
         root_module_direct_deps = ["hugo_amd64_linux", "hugo_arm64_linux", "hugo_macos"],
         root_module_direct_dev_deps = [],
+        reproducible = True,
     )
 
 hugo = module_extension(

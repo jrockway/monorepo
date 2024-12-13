@@ -181,58 +181,6 @@
   },
   "selectedYankedVersions": {},
   "moduleExtensions": {
-    "//tools/hugo:extensions.bzl%hugo": {
-      "general": {
-        "bzlTransitiveDigest": "pG+TdSaEhS6y/0uPRX/43B39EDAjvOTCAiTqEJZxKGI=",
-        "usagesDigest": "/tKZoy5r71ablFFBRC3F46DK8ucSouYo1nOfHKsc5h0=",
-        "recordedFileInputs": {},
-        "recordedDirentsInputs": {},
-        "envVariables": {},
-        "generatedRepoSpecs": {
-          "hugo_amd64_linux": {
-            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
-            "attributes": {
-              "url": "https://github.com/gohugoio/hugo/releases/download/v0.139.2/hugo_0.139.2_linux-amd64.tar.gz",
-              "build_file_content": "exports_files([\"hugo\"])\n    ",
-              "sha256": "6b22df5394f3e52726e173f6cdc97a3b45a7ab3c82912fb85a2eb635495f6af1"
-            }
-          },
-          "hugo_arm64_linux": {
-            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
-            "attributes": {
-              "url": "https://github.com/gohugoio/hugo/releases/download/v0.139.2/hugo_0.139.2_linux-arm64.tar.gz",
-              "build_file_content": "exports_files([\"hugo\"])\n    ",
-              "sha256": "b1f865f8aa34131cc786916109d24f835a2f526a4b5e1e348bb3172a8c3f2828"
-            }
-          },
-          "hugo_macos": {
-            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
-            "attributes": {
-              "url": "https://github.com/gohugoio/hugo/releases/download/v0.139.2/hugo_0.139.2_darwin-universal.tar.gz",
-              "build_file_content": "exports_files([\"hugo\"])\n    ",
-              "sha256": "4d1a465d21acf1e284dd8f460a7109351082c231bd80e3b272033c82f2379642"
-            }
-          }
-        },
-        "moduleExtensionMetadata": {
-          "explicitRootModuleDirectDeps": [
-            "hugo_amd64_linux",
-            "hugo_arm64_linux",
-            "hugo_macos"
-          ],
-          "explicitRootModuleDirectDevDeps": [],
-          "useAllRepos": "NO",
-          "reproducible": false
-        },
-        "recordedRepoMappingEntries": [
-          [
-            "",
-            "bazel_tools",
-            "bazel_tools"
-          ]
-        ]
-      }
-    },
     "@@aspect_bazel_lib+//lib:extensions.bzl%toolchains": {
       "general": {
         "bzlTransitiveDigest": "nMHOQ6p96VjL13UTkyEuEmBhtwRLri14ihhW/2pmcYo=",
