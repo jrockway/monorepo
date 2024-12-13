@@ -11,6 +11,7 @@ bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.7.1")
 bazel_dep(name = "gazelle", version = "0.40.0")
 bazel_dep(name = "hermetic_cc_toolchain", version = "3.1.1")
 bazel_dep(name = "platforms", version = "0.0.10")
+bazel_dep(name = "rules_distroless", version = "0.4.2")
 bazel_dep(name = "rules_go", version = "0.50.1")
 bazel_dep(name = "rules_nodejs", version = "6.3.2")
 bazel_dep(name = "rules_oci", version = "2.0.1")
@@ -191,3 +192,13 @@ register_toolchains(
 # postgres
 postgres = use_extension("//tools/postgres:extensions.bzl", "postgres")
 use_repo(postgres, "com_enterprisedb_get_postgresql_macos")
+
+# apt (for Postgres binaries, cacerts, etc)
+apt = use_extension("@rules_distroless//apt:extensions.bzl", "apt")
+apt.install(
+    name = "apt",
+    lock = "//internal/apt:apt.lock.json",
+    manifest = "//internal/apt:apt.yaml",
+    resolve_transitive = True,
+)
+use_repo(apt, "apt")
