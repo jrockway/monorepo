@@ -1,4 +1,15 @@
+load("@rules_distroless//distroless:defs.bzl", "flatten")
+
 exports_files([
     "apt.yaml",
     "apt.lock.json",
 ])
+
+flatten(
+    name = "postgres_host_tar",
+    tars = select({
+        "//:is_amd64_linux": ["@apt//postgresql-17/amd64"],
+        "//:is_arm64_linux": ["@apt//postgresql-17/arm64"],
+    }),
+    visibility = ["//internal/testpostgres:__pkg__"],
+)

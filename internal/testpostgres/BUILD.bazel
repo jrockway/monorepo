@@ -1,0 +1,20 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "testpostgres",
+    srcs = ["testpostgres.go"],
+    data = select({
+        "//:is_linux": ["//internal/apt:postgres_host_tar"],
+        "//:is_macos": ["@com_enterprisedb_get_postgresql_macos//:bin/psql"],
+    }),
+    importpath = "github.com/jrockway/monorepo/internal/testpostgres",
+    visibility = ["//:__subpackages__"],
+    x_defs = select({
+        "//:is_linux": {"postgresArchiveRlocation": "$(rlocationpath //internal/apt:postgres_host_tar)"},
+        "//:is_macos": {"psqlBinaryRlocation": "$(rlocationpath @com_enterprisedb_get_postgresql_macos//:bin/psql)"},
+    }),
+    deps = [
+        "//internal/errors",
+        "//internal/tarutil",
+    ],
+)

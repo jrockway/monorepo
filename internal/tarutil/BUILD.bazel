@@ -1,0 +1,15 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "tarutil",
+    srcs = ["tarutil.go"],
+    importpath = "github.com/jrockway/monorepo/internal/tarutil",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//internal/errors",
+        "//internal/log",
+        "@com_github_zeebo_blake3//:blake3",
+        "@org_uber_go_zap//:zap",
+        "@rules_go//go/runfiles",
+    ],
+)
