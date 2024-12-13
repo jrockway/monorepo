@@ -26,7 +26,7 @@ var (
 			} else {
 				raw, err := base64.StdEncoding.DecodeString(args[0])
 				if err != nil {
-					return err
+					return err //nolint:wrapcheck
 				}
 				key = raw
 			}

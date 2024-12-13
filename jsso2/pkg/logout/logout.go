@@ -1,3 +1,4 @@
+// Package logout implements an HTTP logout handler.
 package logout
 
 import (

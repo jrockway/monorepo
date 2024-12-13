@@ -1,0 +1,12 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "client",
+    srcs = ["client.go"],
+    importpath = "github.com/jrockway/monorepo/jsso2/pkg/client",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//jsso2/pkg/jssopb",
+        "@org_golang_google_grpc//:grpc",
+    ],
+)

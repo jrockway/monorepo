@@ -1,3 +1,4 @@
+// Package web generates hyperlinks for the web app.
 package web
 
 import (

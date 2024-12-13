@@ -1,0 +1,18 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "testserver",
+    srcs = ["testserver.go"],
+    importpath = "github.com/jrockway/monorepo/jsso2/pkg/testserver",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//jsso2/pkg/client",
+        "//jsso2/pkg/internalauth",
+        "//jsso2/pkg/jsso/cmd",
+        "//jsso2/pkg/jssopb",
+        "//jsso2/pkg/jtesting",
+        "//jsso2/pkg/store",
+        "@com_github_grpc_ecosystem_go_grpc_middleware//logging/zap",
+        "@org_golang_google_grpc//:grpc",
+    ],
+)

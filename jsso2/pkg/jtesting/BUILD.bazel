@@ -1,0 +1,32 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "jtesting",
+    srcs = ["jtesting.go"],
+    data = ["//jsso2:env.jsso2-backend.dev"],
+    importpath = "github.com/jrockway/monorepo/jsso2/pkg/jtesting",
+    visibility = ["//visibility:public"],
+    x_defs = {
+        "backendDevEnvLocation": "$(rlocationpaths //jsso2:env.jsso2-backend.dev)",
+    },
+    deps = [
+        "@com_github_grpc_ecosystem_go_grpc_middleware//logging/zap/ctxzap",
+        "@com_github_jackc_pgx_v4//:pgx",
+        "@com_github_jackc_pgx_v4//stdlib",
+        "@com_github_joho_godotenv//:godotenv",
+        "@org_golang_google_grpc//:grpc",
+        "@org_uber_go_zap//:zap",
+        "@org_uber_go_zap//zaptest",
+        "@rules_go//go/runfiles",
+    ],
+)
+
+go_test(
+    name = "jtesting_test",
+    srcs = ["jtesting_test.go"],
+    embed = [":jtesting"],
+    deps = [
+        "@org_uber_go_zap//:zap",
+        "@org_uber_go_zap//zapcore",
+    ],
+)

@@ -1,0 +1,19 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "zapwriter",
+    srcs = ["zapwriter.go"],
+    importpath = "github.com/jrockway/monorepo/jsso2/pkg/util/zapwriter",
+    visibility = ["//visibility:public"],
+    deps = ["@org_uber_go_zap//:zap"],
+)
+
+go_test(
+    name = "zapwriter_test",
+    srcs = ["zapwriter_test.go"],
+    embed = [":zapwriter"],
+    deps = [
+        "@org_uber_go_zap//:zap",
+        "@org_uber_go_zap//zapcore",
+    ],
+)

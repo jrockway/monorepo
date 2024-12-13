@@ -22,6 +22,7 @@ gazelle_binary(
 )
 
 # gazelle:prefix github.com/jrockway/monorepo
+# gazelle:proto disable
 gazelle(
     name = "gazelle",
     gazelle = "//:custom_gazelle_binary",

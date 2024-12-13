@@ -1,3 +1,4 @@
+// Package login implements the login flow.
 package login
 
 import (

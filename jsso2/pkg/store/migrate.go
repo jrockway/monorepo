@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"os"
-	"path/filepath"
+	"path"
 	"strings"
 
+	"github.com/bazelbuild/rules_go/go/runfiles"
 	"github.com/jackc/pgx/v4/stdlib"
 	"github.com/jackc/tern/migrate"
 )
@@ -17,37 +17,21 @@ const (
 	migrationPath = "migrations"
 )
 
+var (
+	migrationsLocation string
+)
+
 func findMigrations() (string, error) {
-	cwd, err := os.Getwd()
-	if err != nil {
-		return "", err
-	}
-	start, err := filepath.Abs(cwd)
-	if err != nil {
-		return "", fmt.Errorf("abs: %w", err)
-	}
-	parts := strings.Split(start, string(filepath.Separator))
-	if len(parts) > 0 {
-		// filepath.Join really wants a / there, not ""
-		parts[0] = string(filepath.Separator)
+	migrations := strings.Split(migrationsLocation, " ")
+	if len(migrations) == 0 {
+		return "", errors.New("no migrationsLocation set in x_defs; unable to locate migrations")
 	}
 
-	var lookedAt []string
-	for i := len(parts); i > 0; i-- {
-		target := filepath.Join(filepath.Join(parts[0:i]...), migrationPath)
-		lookedAt = append(lookedAt, target)
-		info, err := os.Stat(target)
-		if err != nil {
-			if errors.Is(err, os.ErrNotExist) {
-				continue
-			}
-			return "", err
-		}
-		if info.IsDir() {
-			return target, nil
-		}
+	location, err := runfiles.Rlocation(migrations[0])
+	if err != nil {
+		return "", fmt.Errorf("no runfile for first migration %v: %w", migrationsLocation, err)
 	}
-	return "", fmt.Errorf("no migrations found; looked in %v", lookedAt)
+	return path.Dir(location), nil
 }
 
 func (c *Connection) MigrateDB(ctx context.Context) error {
@@ -66,7 +50,7 @@ func (c *Connection) MigrateDB(ctx context.Context) error {
 			return fmt.Errorf("find migrations: %w", err)
 		}
 		if err := m.LoadMigrations(path); err != nil {
-			return fmt.Errorf("load migrations from ./migrations: %w", err)
+			return fmt.Errorf("load migrations from runfiles: %w", err)
 		}
 		if err := m.Migrate(ctx); err != nil {
 			return fmt.Errorf("migrate: %w", err)

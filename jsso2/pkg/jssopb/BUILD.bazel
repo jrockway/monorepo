@@ -1,0 +1,22 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "jssopb",
+    srcs = [
+        "doc.go",
+        "jsso.pb.go",
+        "jsso_grpc.pb.go",
+    ],
+    importpath = "github.com/jrockway/monorepo/jsso2/pkg/jssopb",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//jsso2/pkg/types",
+        "//jsso2/pkg/webauthnpb",
+        "@com_github_golang_protobuf//proto",
+        "@org_golang_google_grpc//:grpc",
+        "@org_golang_google_grpc//codes",
+        "@org_golang_google_grpc//status",
+        "@org_golang_google_protobuf//reflect/protoreflect",
+        "@org_golang_google_protobuf//runtime/protoimpl",
+    ],
+)

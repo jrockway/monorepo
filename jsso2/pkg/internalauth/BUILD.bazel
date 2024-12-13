@@ -1,0 +1,39 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "internalauth",
+    srcs = ["internalauth.go"],
+    importpath = "github.com/jrockway/monorepo/jsso2/pkg/internalauth",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//jsso2/pkg/sessions",
+        "//jsso2/pkg/store",
+        "//jsso2/pkg/types",
+        "@com_github_grpc_ecosystem_go_grpc_middleware//logging/zap/ctxzap",
+        "@org_golang_google_grpc//:grpc",
+        "@org_golang_google_grpc//codes",
+        "@org_golang_google_grpc//metadata",
+        "@org_golang_google_grpc//status",
+        "@org_golang_google_protobuf//types/known/timestamppb",
+        "@org_uber_go_zap//:zap",
+    ],
+)
+
+go_test(
+    name = "internalauth_test",
+    srcs = ["internalauth_test.go"],
+    embed = [":internalauth"],
+    tags = [
+        "manual",
+        "postgres",
+    ],
+    deps = [
+        "//jsso2/pkg/jtesting",
+        "//jsso2/pkg/sessions",
+        "//jsso2/pkg/store",
+        "@org_golang_google_grpc//:grpc",
+        "@org_golang_google_grpc//health",
+        "@org_golang_google_grpc//health/grpc_health_v1",
+        "@org_golang_google_grpc//metadata",
+    ],
+)

@@ -1,0 +1,18 @@
+load("@rules_go//go:def.bzl", "go_test")
+
+go_test(
+    name = "e2e_test",
+    srcs = ["e2e_test.go"],
+    tags = [
+        "manual",
+        "postgres",
+    ],
+    deps = [
+        "//jsso2/pkg/client",
+        "//jsso2/pkg/jssopb",
+        "//jsso2/pkg/jtesting",
+        "//jsso2/pkg/types",
+        "//jsso2/pkg/util/zapwriter",
+        "@org_uber_go_zap//:zap",
+    ],
+)

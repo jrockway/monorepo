@@ -1,0 +1,24 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "jsso2_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/jrockway/monorepo/jsso2/cmd/jsso2",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//jsso2/pkg/internalauth",
+        "//jsso2/pkg/jsso/cmd",
+        "//jsso2/pkg/jssopb",
+        "//jsso2/pkg/store",
+        "@com_github_fullstorydev_grpcui//standalone",
+        "@com_github_jrockway_opinionated_server//server",
+        "@org_golang_google_grpc//:grpc",
+        "@org_uber_go_zap//:zap",
+    ],
+)
+
+go_binary(
+    name = "jsso2",
+    embed = [":jsso2_lib"],
+    visibility = ["//visibility:public"],
+)

@@ -33,6 +33,6 @@ func TestDatabase(t *testing.T) {
 		if err != nil {
 			t.Fatalf("connect to db %q: %v", e.DSN, err)
 		}
-		c.Close()
+		c.Close() //nolint:errcheck
 	})
 }

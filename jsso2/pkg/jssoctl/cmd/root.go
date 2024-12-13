@@ -1,3 +1,4 @@
+// Package cmd implements the JSSO CLI.
 package cmd
 
 import (
@@ -37,7 +38,7 @@ It can be used to administer JSSO, or interact with it as a normal user.`,
 				// Apply the viper config value to the flag when the flag is not set and viper has a value
 				if !f.Changed && viper.IsSet(f.Name) {
 					val := viper.Get(f.Name)
-					cmd.Flags().Set(f.Name, fmt.Sprintf("%v", val))
+					cmd.Flags().Set(f.Name, fmt.Sprintf("%v", val)) //nolint:errcheck
 				}
 			})
 			return nil

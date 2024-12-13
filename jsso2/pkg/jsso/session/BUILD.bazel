@@ -1,0 +1,21 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "session",
+    srcs = ["session.go"],
+    importpath = "github.com/jrockway/monorepo/jsso2/pkg/jsso/session",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//jsso2/pkg/internalauth",
+        "//jsso2/pkg/jssopb",
+        "//jsso2/pkg/redirecttokens",
+        "//jsso2/pkg/sessions",
+        "//jsso2/pkg/store",
+        "//jsso2/pkg/types",
+        "//jsso2/pkg/web",
+        "@com_github_grpc_ecosystem_go_grpc_middleware//logging/zap/ctxzap",
+        "@org_golang_google_grpc//codes",
+        "@org_golang_google_grpc//status",
+        "@org_uber_go_zap//:zap",
+    ],
+)

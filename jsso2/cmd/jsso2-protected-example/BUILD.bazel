@@ -1,0 +1,15 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "jsso2-protected-example_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/jrockway/monorepo/jsso2/cmd/jsso2-protected-example",
+    visibility = ["//visibility:private"],
+    deps = ["@com_github_jrockway_opinionated_server//server"],
+)
+
+go_binary(
+    name = "jsso2-protected-example",
+    embed = [":jsso2-protected-example_lib"],
+    visibility = ["//visibility:public"],
+)

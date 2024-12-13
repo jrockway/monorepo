@@ -1,0 +1,67 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "store",
+    srcs = [
+        "credential.go",
+        "errors.go",
+        "migrate.go",
+        "session.go",
+        "store.go",
+        "testing.go",
+        "tx.go",
+        "user.go",
+    ],
+    data = [
+        "//jsso2/migrations",
+    ],
+    importpath = "github.com/jrockway/monorepo/jsso2/pkg/store",
+    visibility = ["//visibility:public"],
+    x_defs = {
+        "migrationsLocation": "$(rlocationpaths //jsso2/migrations)",
+    },
+    deps = [
+        "//jsso2/pkg/jtesting",
+        "//jsso2/pkg/sessions",
+        "//jsso2/pkg/types",
+        "@com_github_jackc_pgx_v4//stdlib",
+        "@com_github_jackc_tern//migrate",
+        "@com_github_jmoiron_sqlx//:sqlx",
+        "@com_github_opentracing_opentracing_go//:opentracing-go",
+        "@com_github_opentracing_opentracing_go//ext",
+        "@com_github_prometheus_client_golang//prometheus",
+        "@com_github_prometheus_client_golang//prometheus/promauto",
+        "@org_golang_google_grpc//codes",
+        "@org_golang_google_grpc//status",
+        "@org_golang_google_protobuf//encoding/protojson",
+        "@org_golang_google_protobuf//types/known/timestamppb",
+        "@org_uber_go_zap//:zap",
+        "@rules_go//go/runfiles",
+    ],
+)
+
+go_test(
+    name = "store_test",
+    srcs = [
+        "credential_test.go",
+        "session_test.go",
+        "tx_test.go",
+        "user_test.go",
+    ],
+    embed = [":store"],
+    tags = [
+        "manual",
+        "postgres",
+    ],
+    deps = [
+        "//jsso2/pkg/jtesting",
+        "//jsso2/pkg/sessions",
+        "//jsso2/pkg/types",
+        "@com_github_google_go_cmp//cmp",
+        "@com_github_google_go_cmp//cmp/cmpopts",
+        "@com_github_jmoiron_sqlx//:sqlx",
+        "@org_golang_google_protobuf//proto",
+        "@org_golang_google_protobuf//testing/protocmp",
+        "@org_golang_google_protobuf//types/known/timestamppb",
+    ],
+)

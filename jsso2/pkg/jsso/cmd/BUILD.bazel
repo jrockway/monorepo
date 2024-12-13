@@ -1,0 +1,23 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "cmd",
+    srcs = ["cmd.go"],
+    importpath = "github.com/jrockway/monorepo/jsso2/pkg/jsso/cmd",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//jsso2/pkg/internalauth",
+        "//jsso2/pkg/jsso/enrollment",
+        "//jsso2/pkg/jsso/login",
+        "//jsso2/pkg/jsso/session",
+        "//jsso2/pkg/jsso/user",
+        "//jsso2/pkg/logout",
+        "//jsso2/pkg/redirecttokens",
+        "//jsso2/pkg/sessions",
+        "//jsso2/pkg/store",
+        "//jsso2/pkg/tokens",
+        "//jsso2/pkg/web",
+        "//jsso2/pkg/webauthn",
+        "@org_uber_go_zap//:zap",
+    ],
+)

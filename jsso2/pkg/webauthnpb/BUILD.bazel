@@ -1,0 +1,17 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "webauthnpb",
+    srcs = [
+        "doc.go",
+        "webauthn.pb.go",
+    ],
+    importpath = "github.com/jrockway/monorepo/jsso2/pkg/webauthnpb",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_golang_protobuf//proto",
+        "@com_github_golang_protobuf//ptypes/duration",
+        "@org_golang_google_protobuf//reflect/protoreflect",
+        "@org_golang_google_protobuf//runtime/protoimpl",
+    ],
+)

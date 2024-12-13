@@ -1,3 +1,4 @@
+// Package redirecttokens creates and validates web redirects.
 package redirecttokens
 
 import (

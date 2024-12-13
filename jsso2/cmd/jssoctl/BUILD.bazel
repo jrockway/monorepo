@@ -1,0 +1,15 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "jssoctl_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/jrockway/monorepo/jsso2/cmd/jssoctl",
+    visibility = ["//visibility:private"],
+    deps = ["//jsso2/pkg/jssoctl/cmd"],
+)
+
+go_binary(
+    name = "jssoctl",
+    embed = [":jssoctl_lib"],
+    visibility = ["//visibility:public"],
+)

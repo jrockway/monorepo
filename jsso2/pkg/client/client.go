@@ -1,3 +1,4 @@
+// Package client implements a client for JSSO servers.
 package client
 
 import (
@@ -63,5 +64,5 @@ func Dial(ctx context.Context, address string, creds *Credentials, dialopts ...g
 
 // Close closes the clientset's underlying client connection.
 func (s *Set) Close() error {
-	return s.cc.Close()
+	return s.cc.Close() //nolint:wrapcheck
 }

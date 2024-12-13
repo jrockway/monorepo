@@ -1,3 +1,4 @@
+// Package testserver implements a JSSO RPC server for tests.
 package testserver
 
 import (
@@ -41,6 +42,7 @@ func (s *S) Setup(t *testing.T, e *jtesting.E, server *grpc.Server) {
 }
 
 // OK, maybe I went overboard with single-letter type names.
+
 func (s *S) ToR(r *jtesting.R) {
 	r.Database = true
 	r.Logger = true

@@ -24,12 +24,12 @@ func Get(ctx context.Context, url string, code int) error {
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
 		fmt.Println("FAIL", err)
-		return err
+		return err //nolint:wrapcheck
 	}
 	res, err := httpClient.Do(req)
 	if err != nil {
 		fmt.Println("FAIL", err)
-		return err
+		return err //nolint:wrapcheck
 	}
 	res.Body.Close()
 	if res.StatusCode != code {

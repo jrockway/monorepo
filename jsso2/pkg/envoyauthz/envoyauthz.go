@@ -1,3 +1,4 @@
+// Package envoyauthz implements Envoy's external authz interface.
 package envoyauthz
 
 import (

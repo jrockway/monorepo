@@ -1,3 +1,4 @@
+// Package store manages the JSSO database.
 package store
 
 import (

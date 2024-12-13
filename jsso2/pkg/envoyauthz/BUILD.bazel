@@ -1,0 +1,19 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "envoyauthz",
+    srcs = ["envoyauthz.go"],
+    importpath = "github.com/jrockway/monorepo/jsso2/pkg/envoyauthz",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//jsso2/pkg/jssopb",
+        "//jsso2/pkg/sessions",
+        "@com_github_envoyproxy_go_control_plane//envoy/config/core/v3:core",
+        "@com_github_envoyproxy_go_control_plane//envoy/service/auth/v3:auth",
+        "@com_github_envoyproxy_go_control_plane//envoy/type/v3:type",
+        "@org_golang_google_genproto_googleapis_rpc//status",
+        "@org_golang_google_grpc//codes",
+        "@org_golang_google_grpc//status",
+        "@org_golang_google_protobuf//types/known/wrapperspb",
+    ],
+)

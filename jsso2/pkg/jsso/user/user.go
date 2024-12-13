@@ -1,3 +1,4 @@
+// Package user implements the user management service.
 package user
 
 import (

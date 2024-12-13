@@ -1,0 +1,45 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "cmd",
+    srcs = [
+        "dev.go",
+        "grpc.go",
+        "root.go",
+        "users.go",
+    ],
+    importpath = "github.com/jrockway/monorepo/jsso2/pkg/jssoctl/cmd",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//jsso2/pkg/client",
+        "//jsso2/pkg/jssopb",
+        "//jsso2/pkg/tokens",
+        "//jsso2/pkg/types",
+        "@com_github_spf13_cobra//:cobra",
+        "@com_github_spf13_pflag//:pflag",
+        "@com_github_spf13_viper//:viper",
+        "@org_golang_google_protobuf//encoding/protojson",
+    ],
+)
+
+go_test(
+    name = "cmd_test",
+    srcs = ["users_test.go"],
+    embed = [":cmd"],
+    tags = [
+        "manual",
+        "postgres",
+    ],
+    deps = [
+        "//jsso2/pkg/client",
+        "//jsso2/pkg/jssopb",
+        "//jsso2/pkg/jtesting",
+        "//jsso2/pkg/sessions",
+        "//jsso2/pkg/testserver",
+        "//jsso2/pkg/types",
+        "@com_github_google_go_cmp//cmp",
+        "@org_golang_google_protobuf//encoding/protojson",
+        "@org_golang_google_protobuf//proto",
+        "@org_golang_google_protobuf//testing/protocmp",
+    ],
+)

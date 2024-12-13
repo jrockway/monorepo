@@ -1,0 +1,36 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "webauthn",
+    srcs = ["webauthn.go"],
+    importpath = "github.com/jrockway/monorepo/jsso2/pkg/webauthn",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//jsso2/pkg/jssopb",
+        "//jsso2/pkg/sessions",
+        "//jsso2/pkg/types",
+        "//jsso2/pkg/webauthnpb",
+        "@com_github_duo_labs_webauthn//protocol",
+        "@com_github_duo_labs_webauthn//protocol/webauthncose",
+        "@com_github_duo_labs_webauthn//webauthn",
+        "@org_golang_google_protobuf//proto",
+        "@org_golang_google_protobuf//types/known/durationpb",
+    ],
+)
+
+go_test(
+    name = "webauthn_test",
+    srcs = ["webauthn_test.go"],
+    embed = [":webauthn"],
+    deps = [
+        "//jsso2/pkg/jssopb",
+        "//jsso2/pkg/sessions",
+        "//jsso2/pkg/types",
+        "//jsso2/pkg/webauthnpb",
+        "@com_github_fxamacker_cbor_v2//:cbor",
+        "@com_github_google_go_cmp//cmp",
+        "@org_golang_google_protobuf//proto",
+        "@org_golang_google_protobuf//testing/protocmp",
+        "@org_golang_google_protobuf//types/known/durationpb",
+    ],
+)

@@ -1,3 +1,4 @@
+// Package cmd implements a command to run the JSSO server.
 package cmd
 
 import (

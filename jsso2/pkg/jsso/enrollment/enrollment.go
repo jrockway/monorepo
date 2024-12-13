@@ -1,3 +1,4 @@
+// Package enrollment implements credential enrollment.
 package enrollment
 
 import (

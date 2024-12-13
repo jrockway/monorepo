@@ -20,7 +20,7 @@ func New(l *zap.Logger) io.WriteCloser {
 			r.CloseWithError(err)
 			return
 		}
-		r.Close()
+		r.Close() //nolint:errcheck
 	}()
 	return w
 }

@@ -44,7 +44,7 @@ func main() {
 	if _, err := conn.Exec(ctx, fmt.Sprintf("create database %q", name)); err != nil {
 		zap.L().Fatal("problem creating new database", zap.String("database_name", name), zap.Error(err))
 	}
-	conn.Close(ctx)
+	conn.Close(ctx) //nolint:errcheck
 
 	if dbConfig.RunMigrations {
 		db, err := store.Connect(ctx, dbConfig.DatabaseURL)

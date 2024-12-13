@@ -1,3 +1,4 @@
+// Package sessions manages browser sessions.
 package sessions
 
 import (

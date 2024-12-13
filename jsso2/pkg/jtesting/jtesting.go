@@ -15,6 +15,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/bazelbuild/rules_go/go/runfiles"
 	"github.com/grpc-ecosystem/go-grpc-middleware/logging/zap/ctxzap"
 	"github.com/jackc/pgx/v4"
 	_ "github.com/jackc/pgx/v4/stdlib" // This is the only driver we support.
@@ -50,13 +51,19 @@ type E struct {
 	ClientConn *grpc.ClientConn
 }
 
+var (
+	backendDevEnvLocation string // The rlocationpath of env.jsso2-backend.dev
+)
+
 // Run runs the provided test function as a subtest with the desired Extras available.
 func Run(t *testing.T, name string, r R, f func(t *testing.T, e *E)) {
 	t.Helper()
 	pc, _, _, pcOk := runtime.Caller(1)
 	t.Run(name, func(t *testing.T) {
-		_, file, _, _ := runtime.Caller(0)
-		envFile := filepath.Clean(filepath.Join(file, "..", "..", "..", "env.jsso2-backend.dev"))
+		envFile, err := runfiles.Rlocation(backendDevEnvLocation)
+		if err != nil {
+			t.Fatalf("unable to lookup runfile for %q: %v", backendDevEnvLocation, err)
+		}
 		if err := godotenv.Load(envFile); err != nil {
 			t.Fatalf("failed to load %s: %v", envFile, err)
 		}
@@ -76,7 +83,7 @@ func Run(t *testing.T, name string, r R, f func(t *testing.T, e *E)) {
 
 		if r.Logger {
 			logger := zaptest.NewLogger(t, zaptest.Level(zap.DebugLevel))
-			defer logger.Sync()
+			defer logger.Sync() //nolint:errcheck
 			restoreLogger := zap.ReplaceGlobals(logger.Named("global"))
 			defer restoreLogger()
 			extras.Logger = logger.Named("test." + name)
@@ -109,8 +116,8 @@ func Run(t *testing.T, name string, r R, f func(t *testing.T, e *E)) {
 			if err != nil {
 				t.Fatalf("listen on unix file %s: %v", name, err)
 			}
-			defer l.Close()
-			defer os.Remove(name)
+			defer l.Close()       //nolint:errcheck
+			defer os.Remove(name) //nolint:errcheck
 
 			var serverOpts []grpc.ServerOption
 			if r.GRPCOptions != nil {
@@ -118,7 +125,7 @@ func Run(t *testing.T, name string, r R, f func(t *testing.T, e *E)) {
 			}
 			s := grpc.NewServer(serverOpts...)
 			r.GRPC(t, extras, s)
-			go s.Serve(l)
+			go s.Serve(l) //nolint:errcheck
 			defer s.Stop()
 
 			clientOpts := []grpc.DialOption{grpc.WithInsecure()}
@@ -130,7 +137,7 @@ func Run(t *testing.T, name string, r R, f func(t *testing.T, e *E)) {
 				t.Fatalf("dial grpc server: %v", err)
 			}
 			extras.ClientConn = cc
-			defer cc.Close()
+			defer cc.Close() //nolint:errcheck
 		}
 		f(t, extras)
 		select {
@@ -177,7 +184,7 @@ func newTestDB(ctx context.Context, pc uintptr, name, databaseURL string) (strin
 	if err != nil {
 		return "", fmt.Errorf("connect %s: %w", cfg.ConnString(), err)
 	}
-	defer c.Close()
+	defer c.Close() //nolint:errcheck
 	if _, err := c.ExecContext(ctx, fmt.Sprintf("drop database if exists %q with (force)", name)); err != nil {
 		return "", fmt.Errorf("drop old database %s: %w", name, err)
 	}

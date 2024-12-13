@@ -1,0 +1,23 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "jsso2-envoy-authz_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/jrockway/monorepo/jsso2/cmd/jsso2-envoy-authz",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//jsso2/pkg/client",
+        "//jsso2/pkg/envoyauthz",
+        "@com_github_envoyproxy_go_control_plane//envoy/service/auth/v3:auth",
+        "@com_github_jrockway_opinionated_server//client",
+        "@com_github_jrockway_opinionated_server//server",
+        "@org_golang_google_grpc//:grpc",
+        "@org_uber_go_zap//:zap",
+    ],
+)
+
+go_binary(
+    name = "jsso2-envoy-authz",
+    embed = [":jsso2-envoy-authz_lib"],
+    visibility = ["//visibility:public"],
+)

@@ -202,6 +202,7 @@ func sessionMetadataFromContext(ctx context.Context) *types.SessionMetadata {
 }
 
 // General policy decisions start here.
+
 func (p *Permissions) EnrollmentSessionPrototype(ctx context.Context, target *types.User) (*types.Session, error) {
 	id, err := sessions.GenerateID()
 	if err != nil {

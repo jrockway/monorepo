@@ -11,9 +11,9 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-// How long we'll accept a set-cookie token after issuance.  We probably only need it for a few
-// milliseconds, but the risk of making this longer is minimal, and a long duration helps with clock
-// skew issues.
+// SetCookieTokenLifetime controls how long we'll accept a set-cookie token after issuance.  We
+// probably only need it for a few milliseconds, but the risk of making this longer is minimal, and
+// a long duration helps with clock skew issues.
 const SetCookieTokenLifetime = time.Minute
 
 // CookieConfig configures the session cookies (and set-cookie tokens) we produce.
@@ -56,7 +56,7 @@ func (c *CookieConfig) HandleSetCookie(w http.ResponseWriter, req *http.Request)
 	if redirect == "" {
 		w.Header().Set("content-type", "text/plain")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("ok"))
+		w.Write([]byte("ok")) //nolint:errcheck
 		return
 	}
 	http.Redirect(w, req, redirect, http.StatusSeeOther)
@@ -103,14 +103,14 @@ type UnusedCookie struct {
 	Err    error
 }
 
-// SessionFromMetadata extracts authorization headers and cookies from the metadata, returning any
+// SessionsFromMetadata extracts authorization headers and cookies from the metadata, returning any
 // sessions that were found, a list of unused authorization headers, and a list of unused cookies.
 // md must not be nil.
 func (c *CookieConfig) SessionsFromMetadata(md metadata.MD) ([]*types.Session, []*UnusedHeader, []*UnusedCookie) {
 	return c.SessionsFromAny(md.Get("authorization"), md.Get("cookie"))
 }
 
-// SessionFromRequest extracts authentication material from the provided request, returning any
+// SessionsFromRequest extracts authentication material from the provided request, returning any
 // sessions that were found, a list of unused authorization headers, and a list of unused cookies.
 func (c *CookieConfig) SessionsFromRequest(req *http.Request) ([]*types.Session, []*UnusedHeader, []*UnusedCookie) {
 	var result []*types.Session
@@ -124,7 +124,7 @@ func (c *CookieConfig) SessionsFromRequest(req *http.Request) ([]*types.Session,
 	return result, unusedAuth, unusedCookies
 }
 
-// SessionFromAny takes a slice of Authorization headers and Cookie headers, and returns valid
+// SessionsFromAny takes a slice of Authorization headers and Cookie headers, and returns valid
 // sessions, a list of unused Authorization headers, and a list of unused cookies.
 func (c *CookieConfig) SessionsFromAny(headers, cookies []string) ([]*types.Session, []*UnusedHeader, []*UnusedCookie) {
 	var result []*types.Session
@@ -135,7 +135,7 @@ func (c *CookieConfig) SessionsFromAny(headers, cookies []string) ([]*types.Sess
 	return result, unusedAuth, unusedCookies
 }
 
-// SessionFromAuthorization extracts sessions from the authorization headers, returning
+// SessionsFromAuthorization extracts sessions from the authorization headers, returning
 // unused/invalid authorization headers.
 func (c *CookieConfig) SessionsFromAuthorization(auths ...string) ([]*types.Session, []*UnusedHeader) {
 	var result []*types.Session
@@ -160,8 +160,8 @@ func (c *CookieConfig) SessionsFromAuthorization(auths ...string) ([]*types.Sess
 	return result, unused
 }
 
-// SessionFromCookies looks through the provided cookies and returns the sessionID from cookies that
-// look like a session, and the list of cookies with all matching cookies removed (along with a
+// SessionsFromCookies looks through the provided cookies and returns the sessionID from cookies
+// that look like a session, and the list of cookies with all matching cookies removed (along with a
 // reason for not considering it a session cookie).
 func (c *CookieConfig) SessionsFromCookies(cookies []*http.Cookie) ([]*types.Session, []*UnusedCookie) {
 	var result []*types.Session
