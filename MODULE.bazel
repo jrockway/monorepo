@@ -187,3 +187,7 @@ register_toolchains(
     "@zig_sdk//toolchain:x86_64-macos-none",
     "@zig_sdk//toolchain:aarch64-macos-none",
 )
+
+# postgres
+postgres = use_extension("//tools/postgres:extensions.bzl", "postgres")
+use_repo(postgres, "com_enterprisedb_get_postgresql_macos")
