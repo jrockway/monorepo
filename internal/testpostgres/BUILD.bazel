@@ -1,4 +1,4 @@
-load("@rules_go//go:def.bzl", "go_library")
+load("@rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "testpostgres",
@@ -15,6 +15,21 @@ go_library(
     }),
     deps = [
         "//internal/errors",
+        "//internal/log",
+        "//internal/pctx",
         "//internal/tarutil",
+        "@com_github_jackc_pgx_v4//:pgx",
+        "@org_uber_go_zap//:zap",
+    ],
+)
+
+go_test(
+    name = "testpostgres_test",
+    srcs = ["testpostgres_test.go"],
+    embed = [":testpostgres"],
+    deps = [
+        "//internal/pctx",
+        "@com_github_google_go_cmp//cmp",
+        "@com_github_jackc_pgx_v4//:pgx",
     ],
 )
