@@ -55,8 +55,8 @@ func Exit(ctx context.Context, msg string, fields ...Field) {
 	extractLogger(ctx).Fatal(msg, fields...)
 }
 
-// WriterAt creates a new io.Writer that logs each line as a log message at the provided levels.
-func WriterAt(ctx context.Context, lvl Level) io.WriteCloser {
+// NewWriterAt creates a new io.Writer that logs each line as a log message at the provided levels.
+func NewWriterAt(ctx context.Context, lvl Level) io.WriteCloser {
 	l := extractLogger(ctx).WithOptions(zap.WithCaller(false))
 	return &zapio.Writer{
 		Log:   l,
