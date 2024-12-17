@@ -12,7 +12,10 @@ go_library(
     deps = [
         "//internal/errors",
         "//internal/links",
+        "//internal/log",
+        "//internal/pctx",
         "@com_github_klauspost_compress//zstd",
+        "@org_uber_go_zap//:zap",
         "@rules_go//go/runfiles",
     ],
 )

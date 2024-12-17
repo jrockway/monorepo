@@ -6,17 +6,18 @@ import (
 	"flag"
 	"io"
 	"io/fs"
-	"log"
 	"os"
 	"os/exec"
-	"os/signal"
 	"path/filepath"
 	"time"
 
 	"github.com/bazelbuild/rules_go/go/runfiles"
 	"github.com/jrockway/monorepo/internal/errors"
 	"github.com/jrockway/monorepo/internal/links"
+	"github.com/jrockway/monorepo/internal/log"
+	"github.com/jrockway/monorepo/internal/pctx"
 	"github.com/klauspost/compress/zstd"
+	"go.uber.org/zap"
 )
 
 var (
@@ -51,8 +52,8 @@ func run(ctx context.Context, cd, out string) (retErr error) {
 	}
 
 	cmd := exec.CommandContext(ctx, h, "--noBuildLock", "--destination", outdir, "--environment", "production")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	cmd.Stdout = log.NewWriterAt(pctx.Child(ctx, "stdout"), log.InfoLevel)
+	cmd.Stderr = log.NewWriterAt(pctx.Child(ctx, "stderr"), log.InfoLevel)
 	cmd.Dir = filepath.Join(indir, cd)
 	if err := cmd.Run(); err != nil {
 		return errors.Wrap(err, "run hugo")
@@ -133,10 +134,11 @@ func run(ctx context.Context, cd, out string) (retErr error) {
 }
 
 func main() {
+	log.InitLogger()
 	flag.Parse()
-	ctx, c := signal.NotifyContext(context.Background(), os.Interrupt)
+	ctx, c := pctx.Interactive()
 	defer c()
 	if err := run(ctx, *cd, *out); err != nil {
-		log.Fatalf("run: %v", err)
+		log.Exit(ctx, "problem running hugo", zap.Error(err))
 	}
 }

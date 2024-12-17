@@ -1,13 +1,13 @@
 package main
 
 import (
-	"context"
 	"errors"
 	"os"
 	"os/exec"
 	"syscall"
 
 	"github.com/jrockway/monorepo/internal/log"
+	"github.com/jrockway/monorepo/internal/pctx"
 	"github.com/jrockway/monorepo/internal/testpostgres"
 	"go.uber.org/zap"
 )
@@ -15,7 +15,7 @@ import (
 func main() {
 	log.InitLogger()
 	log.SetLevel(log.DebugLevel)
-	ctx := log.AddLogger(context.Background())
+	ctx := pctx.Background("")
 	cmd, err := testpostgres.PsqlCmd(ctx)
 	if err != nil {
 		log.Exit(ctx, "problem resolving psql command", zap.Error(err))

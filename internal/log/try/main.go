@@ -1,10 +1,10 @@
 package main
 
 import (
-	"context"
 	"time"
 
 	"github.com/jrockway/monorepo/internal/log"
+	"github.com/jrockway/monorepo/internal/pctx"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"google.golang.org/protobuf/types/known/wrapperspb"
@@ -24,8 +24,7 @@ func (t Thing) MarshalLogObject(enc zapcore.ObjectEncoder) error {
 func main() {
 	log.InitLogger()
 	log.SetLevel(log.DebugLevel)
-	ctx := context.Background()
-	ctx = log.AddLogger(ctx)
+	ctx := pctx.Background("")
 	foo := zap.String("foo", "this is a long string")
 	log.Debug(ctx, "this is a debug log", foo)
 	log.Info(ctx, "this is an info log", foo, log.Proto("bytes", &wrapperspb.BytesValue{

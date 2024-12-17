@@ -7,6 +7,7 @@ go_library(
     visibility = ["//visibility:private"],
     deps = [
         "//internal/log",
+        "//internal/pctx",
         "@org_golang_google_protobuf//types/known/wrapperspb",
         "@org_uber_go_zap//:zap",
         "@org_uber_go_zap//zapcore",
