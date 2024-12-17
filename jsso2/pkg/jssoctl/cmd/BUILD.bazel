@@ -26,10 +26,6 @@ go_test(
     name = "cmd_test",
     srcs = ["users_test.go"],
     embed = [":cmd"],
-    tags = [
-        "manual",
-        "postgres",
-    ],
     deps = [
         "//jsso2/pkg/client",
         "//jsso2/pkg/jssopb",

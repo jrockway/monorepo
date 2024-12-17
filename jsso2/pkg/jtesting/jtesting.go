@@ -20,6 +20,8 @@ import (
 	"github.com/jackc/pgx/v4"
 	_ "github.com/jackc/pgx/v4/stdlib" // This is the only driver we support.
 	"github.com/joho/godotenv"
+	"github.com/jrockway/monorepo/internal/pctx"
+	"github.com/jrockway/monorepo/internal/testpostgres"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/grpc"
@@ -74,10 +76,10 @@ func Run(t *testing.T, name string, r R, f func(t *testing.T, e *E)) {
 			},
 		}
 
-		ctx, c := context.WithCancel(context.Background())
+		ctx, c := context.WithCancel(pctx.TestContext(t))
 		if r.Timeout > 0 {
 			c()
-			ctx, c = context.WithTimeout(context.Background(), r.Timeout)
+			ctx, c = context.WithTimeout(pctx.TestContext(t), r.Timeout)
 		}
 		defer c()
 
@@ -95,7 +97,12 @@ func Run(t *testing.T, name string, r R, f func(t *testing.T, e *E)) {
 			if !pcOk {
 				t.Fatal("could not determine caller to generate database name")
 			}
-			dsn, err := newTestDB(ctx, pc, name, extras.Config.SuperuserDSN)
+			cfg, cleanup, err := testpostgres.RunPostgres(ctx)
+			if err != nil {
+				t.Fatalf("starting postgres: %v", err)
+			}
+			t.Cleanup(cleanup)
+			dsn, err := newTestDB(ctx, pc, name, cfg.ConnString())
 			if err != nil {
 				t.Fatalf("creating test database: %v", err)
 			}

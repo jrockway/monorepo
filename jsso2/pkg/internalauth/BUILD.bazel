@@ -23,10 +23,6 @@ go_test(
     name = "internalauth_test",
     srcs = ["internalauth_test.go"],
     embed = [":internalauth"],
-    tags = [
-        "manual",
-        "postgres",
-    ],
     deps = [
         "//jsso2/pkg/jtesting",
         "//jsso2/pkg/sessions",

@@ -49,10 +49,6 @@ go_test(
         "user_test.go",
     ],
     embed = [":store"],
-    tags = [
-        "manual",
-        "postgres",
-    ],
     deps = [
         "//jsso2/pkg/jtesting",
         "//jsso2/pkg/sessions",

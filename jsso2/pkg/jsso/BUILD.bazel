@@ -14,10 +14,6 @@ go_test(
         "session_test.go",
     ],
     embed = [":jsso"],
-    tags = [
-        "manual",
-        "postgres",
-    ],
     deps = [
         "//jsso2/pkg/client",
         "//jsso2/pkg/jssopb",

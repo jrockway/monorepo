@@ -3,10 +3,6 @@ load("@rules_go//go:def.bzl", "go_test")
 go_test(
     name = "e2e_test",
     srcs = ["e2e_test.go"],
-    tags = [
-        "manual",
-        "postgres",
-    ],
     deps = [
         "//jsso2/pkg/client",
         "//jsso2/pkg/jssopb",

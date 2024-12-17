@@ -241,7 +241,7 @@ func RunPostgres(ctx context.Context) (cfg *pgx.ConnConfig, awaitCleanup func(),
 	}()
 
 	// Wait for the server to accept connections (or fail to start up).
-	cfg, err = pgx.ParseConfig("database=postgres user=postgres host=" + dir)
+	cfg, err = pgx.ParseConfig("user=postgres host=" + dir)
 	if err != nil {
 		return nil, nil, errors.Wrap(err, "hard-coded config appears invalid")
 	}
