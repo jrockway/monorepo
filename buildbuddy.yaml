@@ -10,5 +10,5 @@ actions:
               - "*"
       steps:
           - run:
-                "bazel test --config=remotecache --config=remote --jobs=50
+                "bazel test -k --config=remotecache --config=remote --jobs=50
                 --remote_grpc_log=$BUILDBUDDY_ARTIFACTS_DIRECTORY/grpc.log //... //:style_tests"
