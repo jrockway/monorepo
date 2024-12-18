@@ -25,6 +25,10 @@ go_test(
     name = "jtesting_test",
     srcs = ["jtesting_test.go"],
     embed = [":jtesting"],
+    tags = [
+        "manual",
+        "postgres",
+    ],
     deps = [
         "@org_uber_go_zap//:zap",
         "@org_uber_go_zap//zapcore",
