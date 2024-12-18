@@ -10,10 +10,11 @@ import (
 
 func TestDatabase(t *testing.T) {
 	ctx := pctx.TestContext(t)
-	cfg, err := RunPostgres(ctx)
+	cfg, cleanup, err := RunPostgres(ctx)
 	if err != nil {
 		t.Fatalf("start postgres: %v", err)
 	}
+	t.Cleanup(cleanup)
 	c, err := pgx.ConnectConfig(ctx, cfg)
 	if err != nil {
 		t.Fatalf("connect: %v", err)

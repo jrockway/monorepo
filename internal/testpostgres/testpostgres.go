@@ -40,11 +40,11 @@ func PsqlCmd(ctx context.Context) (*exec.Cmd, error) {
 	return cmd, nil
 }
 
-func RunPostgres(ctx context.Context) (cfg *pgx.ConnConfig, retErr error) {
+func RunPostgres(ctx context.Context) (cfg *pgx.ConnConfig, awaitCleanup func(), retErr error) {
 	// Make tmpdir with data/config.
 	dir, err := os.MkdirTemp("", "com-github-jrockway-monorepo-postgres-data-*")
 	if err != nil {
-		return nil, errors.Wrap(err, "make postgres data directory")
+		return nil, nil, errors.Wrap(err, "make postgres data directory")
 	}
 	cleanup := func() {
 		log.Debug(ctx, "cleaning up postgres tmpdir", zap.String("path", dir))
@@ -62,7 +62,7 @@ func RunPostgres(ctx context.Context) (cfg *pgx.ConnConfig, retErr error) {
 	// Unpack the postgres binaries archive.
 	root, err := Unpack(ctx, "postgres", postgresArchiveRlocation)
 	if err != nil {
-		return nil, errors.Wrap(err, "unpack postgres")
+		return nil, nil, errors.Wrap(err, "unpack postgres")
 	}
 
 	// Run initdb.
@@ -80,7 +80,7 @@ func RunPostgres(ctx context.Context) (cfg *pgx.ConnConfig, retErr error) {
 	init.Stderr = log.NewWriterAt(pctx.Child(ctx, "initdb.stderr"), log.DebugLevel)
 	log.Debug(ctx, "initializing database")
 	if err := init.Run(); err != nil {
-		return nil, errors.Wrap(err, "init postgres database")
+		return nil, nil, errors.Wrap(err, "init postgres database")
 	}
 
 	// Start postgres.
@@ -89,16 +89,22 @@ func RunPostgres(ctx context.Context) (cfg *pgx.ConnConfig, retErr error) {
 	serve.Stdout = log.NewWriterAt(pctx.Child(ctx, "stdout"), log.DebugLevel)
 	serve.Stderr = log.NewWriterAt(pctx.Child(ctx, "stderr"), log.DebugLevel)
 	if err := serve.Start(); err != nil {
-		return nil, errors.Wrap(err, "start postgres")
+		return nil, nil, errors.Wrap(err, "start postgres")
 	}
 
 	// Wait for the server to exit, in the background.
 	doCleanup = false
 	exitCh := make(chan error)
+	cleanupCh := make(chan struct{})
 	go func() {
-		if err := serve.Wait(); err != nil {
-			cleanup()
-			exitCh <- err
+		err := serve.Wait()
+		cleanup()
+		close(cleanupCh)
+		if err != nil {
+			select {
+			case exitCh <- err:
+			case <-ctx.Done():
+			}
 		}
 		close(exitCh)
 
@@ -107,7 +113,7 @@ func RunPostgres(ctx context.Context) (cfg *pgx.ConnConfig, retErr error) {
 	// Wait for the server to accept connections (or fail to start up).
 	cfg, err = pgx.ParseConfig("database=postgres host=" + dir)
 	if err != nil {
-		return nil, errors.Wrap(err, "hard-coded config appears invalid")
+		return nil, nil, errors.Wrap(err, "hard-coded config appears invalid")
 	}
 	pingCh := make(chan error)
 	go func(rctx context.Context) {
@@ -158,8 +164,15 @@ func RunPostgres(ctx context.Context) (cfg *pgx.ConnConfig, retErr error) {
 		if killErr := serve.Process.Kill(); err != nil {
 			errors.JoinInto(&err, errors.Wrap(killErr, "killing postgres"))
 		}
-		return nil, errors.Wrap(err, "server did not start ok")
+		return nil, nil, errors.Wrap(err, "server did not start ok")
 	}
 	log.Debug(ctx, "database started ok")
-	return cfg, nil
+	return cfg, func() {
+		if err := serve.Process.Kill(); err != nil {
+			if !errors.Is(err, os.ErrProcessDone) {
+				log.Debug(ctx, "problem killing postgres", zap.Error(err))
+			}
+		}
+		<-cleanupCh
+	}, nil
 }
