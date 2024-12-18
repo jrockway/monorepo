@@ -203,3 +203,7 @@ apt.install(
     resolve_transitive = True,
 )
 use_repo(apt, "apt")
+
+# patchelf
+patchelf = use_extension("//tools/patchelf:extensions.bzl", "patchelf")
+use_repo(patchelf, "patchelf_amd64_linux", "patchelf_arm64_linux")
