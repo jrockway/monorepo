@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/bazelbuild/rules_go/go/runfiles"
@@ -45,6 +46,9 @@ func Unpack(ctx context.Context, name, rlocation string) (_ string, retErr error
 	if err != nil {
 		return "", errors.Wrap(err, "create tmpdir for archive unpack")
 	}
+	if err := os.Chmod(tmp, 0o755); err != nil {
+		return "", errors.Wrap(err, "widen permissions of tmpdir")
+	}
 	var outputOK bool
 	defer func() {
 		if outputOK {
@@ -69,9 +73,10 @@ func Unpack(ctx context.Context, name, rlocation string) (_ string, retErr error
 		}
 		rel := filepath.FromSlash(h.Name)
 		abs := filepath.Join(tmp, rel)
+		mode := h.FileInfo().Mode().Perm()
 		switch h.Typeflag {
 		case tar.TypeReg:
-			w, err := os.OpenFile(abs, os.O_RDWR|os.O_CREATE|os.O_TRUNC, h.FileInfo().Mode().Perm())
+			w, err := os.OpenFile(abs, os.O_RDWR|os.O_CREATE|os.O_TRUNC, mode)
 			if err != nil {
 				return "", errors.Wrapf(err, "open output file %v", abs)
 			}
@@ -95,8 +100,11 @@ func Unpack(ctx context.Context, name, rlocation string) (_ string, retErr error
 			}
 		case tar.TypeSymlink:
 			src := h.Linkname
+			if strings.HasPrefix(src, "/") {
+				src = filepath.Join(dst, src)
+			}
 			if err := os.Symlink(src, abs); err != nil {
-				return "", errors.Wrapf(err, "link %v -> %v", abs, src)
+				return "", errors.Wrapf(err, "link %v -> %v", src, abs)
 			}
 		case tar.TypeLink:
 			log.Debug(ctx, "skipping hard link", zap.String("file", rel), zap.String("linkname", h.Linkname))

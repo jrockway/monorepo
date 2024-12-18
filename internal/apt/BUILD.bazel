@@ -8,8 +8,8 @@ exports_files([
 flatten(
     name = "postgres_host_tar",
     tars = select({
-        "//:is_amd64_linux": ["@apt//postgresql-17/amd64"],
-        "//:is_arm64_linux": ["@apt//postgresql-17/arm64"],
+        "//:is_amd64_linux": ["@apt//postgresql-17/amd64", "@apt//dash/amd64"],
+        "//:is_arm64_linux": ["@apt//postgresql-17/arm64", "@apt//dash/arm64"],
     }),
     visibility = ["//internal/testpostgres:__pkg__"],
 )

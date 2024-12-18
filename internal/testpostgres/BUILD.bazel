@@ -4,13 +4,19 @@ go_library(
     name = "testpostgres",
     srcs = ["testpostgres.go"],
     data = select({
-        "//:is_linux": ["//internal/apt:postgres_host_tar"],
+        "//:is_linux": [
+            "//internal/apt:postgres_host_tar",
+            "//tools/patchelf",
+        ],
         "//:is_macos": ["@com_enterprisedb_get_postgresql_macos//:bin/psql"],
     }),
     importpath = "github.com/jrockway/monorepo/internal/testpostgres",
     visibility = ["//:__subpackages__"],
     x_defs = select({
-        "//:is_linux": {"postgresArchiveRlocation": "$(rlocationpath //internal/apt:postgres_host_tar)"},
+        "//:is_linux": {
+            "postgresArchiveRlocation": "$(rlocationpath //internal/apt:postgres_host_tar)",
+            "patchelfRlocation": "$(rlocationpath //tools/patchelf)",
+        },
         "//:is_macos": {"psqlBinaryRlocation": "$(rlocationpath @com_enterprisedb_get_postgresql_macos//:bin/psql)"},
     }),
     deps = [
@@ -20,6 +26,7 @@ go_library(
         "//internal/tarutil",
         "@com_github_jackc_pgx_v4//:pgx",
         "@org_uber_go_zap//:zap",
+        "@rules_go//go/runfiles",
     ],
 )
 

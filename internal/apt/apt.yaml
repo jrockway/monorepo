@@ -19,3 +19,4 @@ archs:
 
 packages:
     - postgresql-17
+    - dash
