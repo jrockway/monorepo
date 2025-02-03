@@ -1,0 +1,28 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+
+go_library(
+    name = "version-bump_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/jrockway/monorepo/version-bump",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_bradleyfalzon_ghinstallation//:ghinstallation",
+        "@com_github_google_go_github_v32//github",
+        "@com_github_jessevdk_go_flags//:go-flags",
+        "@io_k8s_sigs_kustomize_kyaml//yaml",
+        "@org_golang_x_oauth2//:oauth2",
+    ],
+)
+
+go_binary(
+    name = "version-bump",
+    embed = [":version-bump_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "version-bump_test",
+    srcs = ["main_test.go"],
+    embed = [":version-bump_lib"],
+    deps = ["@com_github_google_go_cmp//cmp"],
+)

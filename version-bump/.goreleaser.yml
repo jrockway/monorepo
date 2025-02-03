@@ -1,0 +1,31 @@
+project_name: version-bump
+builds:
+    - id: version-bump
+      dir: .
+      main: main.go
+      binary: version-bump
+      env:
+          - CGO_ENABLED=0
+      goos:
+          - linux
+          - darwin
+          - windows
+      goarch:
+          - amd64
+archives:
+    - id: version-bump
+      builds:
+          - version-bump
+      #format: binary
+      name_template:
+          "{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end
+          }}{{ if .Mips }}-{{ .Mips }}{{ end }}"
+      wrap_in_directory: false
+      files:
+          - this-matches-nothing*
+checksum:
+    disable: true
+release:
+    name_template: "v{{ .Version }}"
+    prerelease: auto
+    disable: false
