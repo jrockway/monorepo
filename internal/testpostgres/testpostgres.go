@@ -103,7 +103,7 @@ func Unpack(ctx context.Context, name, rlocation string) (string, error) {
 	interp := localLdSo(root)
 	rpath := postgresRpath(root)
 	// The binaries haven't been patched yet.  Patch them.
-	bin := root // postgresBin(root, "")
+	bin := root
 	if err := filepath.Walk(bin, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
 			return errors.Wrap(err, "WalkFn called with error")

@@ -113,6 +113,11 @@ func Unpack(ctx context.Context, name, rlocation string) (_ string, retErr error
 		}
 	}
 	if err := os.Rename(tmp, dst); err != nil {
+		if os.IsExist(err) {
+			// Some other test process created this directory already; since it's named
+			// after the hash, we assume it's fine to use here.
+			return dst, nil
+		}
 		return "", errors.Wrapf(err, "rename %v to %v", tmp, dst)
 	}
 	outputOK = true
