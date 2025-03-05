@@ -1,0 +1,53 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+
+go_library(
+    name = "matrix-clock_lib",
+    srcs = [
+        "chrony.go",
+        "clock.go",
+        "data.go",
+        "gpsd.go",
+        "influx.go",
+        "main.go",
+        "sensors.go",
+        "template.go",
+    ],
+    embedsrcs = ["index.html.tmpl"],
+    importpath = "github.com/jrockway/monorepo/matrix-clock",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_facebookincubator_ntp//protocol/chrony",
+        "@com_github_goiot_devices//dotstar",
+        "@com_github_jrockway_go_gpsd//:go-gpsd",
+        "@io_periph_x_conn_v3//i2c",
+        "@io_periph_x_conn_v3//i2c/i2creg",
+        "@io_periph_x_conn_v3//physic",
+        "@io_periph_x_devices_v3//bmxx80",
+        "@io_periph_x_host_v3//:host",
+        "@org_golang_x_exp//io/spi",
+        "@org_golang_x_exp//io/spi/driver",
+        "@org_golang_x_image//font",
+        "@org_golang_x_image//font/basicfont",
+        "@org_golang_x_image//math/fixed",
+        "@org_golang_x_net//trace",
+    ],
+)
+
+go_binary(
+    name = "matrix-clock",
+    embed = [":matrix-clock_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "matrix-clock_test",
+    srcs = [
+        "chrony_test.go",
+        "template_test.go",
+    ],
+    embed = [":matrix-clock_lib"],
+    deps = [
+        "@com_github_facebookincubator_ntp//protocol/chrony",
+        "@com_github_jrockway_go_gpsd//:go-gpsd",
+    ],
+)

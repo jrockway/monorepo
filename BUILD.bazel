@@ -208,10 +208,10 @@ config_setting(
 
 platform(
     name = "any",
-    visibility = ["//:__subpackages__"],
     constraint_values = [
         "@platforms//os:linux",
     ],
+    visibility = ["//:__subpackages__"],
 )
 
 platform(
