@@ -1,26 +1,27 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"sort"
 	"strings"
 	"time"
 
 	"github.com/jrockway/go-gpsd"
+	"github.com/jrockway/monorepo/internal/log"
 	"golang.org/x/net/trace"
 )
 
-func watchGpsd() {
+func watchGpsd(ctx context.Context) {
 	l := trace.NewEventLog("service", "gpsd")
 	defer l.Finish()
 	for {
-		monitorGpsd(l)
+		monitorGpsd(ctx, l)
 		time.Sleep(10 * time.Second)
 	}
 }
 
-func monitorGpsd(l trace.EventLog) {
+func monitorGpsd(ctx context.Context, l trace.EventLog) {
 	watchdog := make(chan struct{})
 	l.Printf("dial localhost:2947")
 	gps, err := gpsd.Dial("localhost:2947")
@@ -77,7 +78,7 @@ func monitorGpsd(l trace.EventLog) {
 			return
 		}
 	})
-	log.Printf("starting gpsd watch loop")
+	log.Info(ctx, "starting gpsd watch loop")
 	watchCh := gps.Watch()
 	for {
 		select {

@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"image"
 	"image/color"
-	"log"
 	"time"
 
 	"github.com/goiot/devices/dotstar"
+	"github.com/jrockway/monorepo/internal/log"
+	"go.uber.org/zap"
 	"golang.org/x/exp/io/spi"
 	"golang.org/x/exp/io/spi/driver"
 	"golang.org/x/image/font"
@@ -52,14 +54,14 @@ func getClockImage(t time.Time) *image.RGBA {
 	return img
 }
 
-func drawClock() {
+func drawClock(ctx context.Context) {
 	dev := "/dev/spidev0.0"
 	l := trace.NewEventLog("peripheral", "display")
 	l.Printf("open " + dev)
 	d, err := dotstar.Open(&spi.Devfs{Dev: dev, Mode: spi.Mode3, MaxSpeed: 100}, n)
 	if err != nil {
 		l.Errorf("open dotstar: %v", err)
-		log.Printf("open dotstar: %v; continuing using dummy SPI driver", err)
+		log.Error(ctx, "failed to open dotstar matrix; using dummy SPI driver", zap.Error(err))
 		d, _ = dotstar.Open(fakeSPI{}, n)
 	}
 
@@ -71,7 +73,7 @@ func drawClock() {
 		l.Errorf("blank display: %v", err)
 	}
 
-	log.Printf("starting clock update loop")
+	log.Info(ctx, "starting clock update loop")
 	for {
 		// Render the current time.
 		img := getClockImage(time.Now())

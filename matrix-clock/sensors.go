@@ -2,18 +2,19 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/binary"
 	"fmt"
-	"log"
 	"time"
 
+	"github.com/jrockway/monorepo/internal/log"
 	"golang.org/x/net/trace"
 	"periph.io/x/conn/v3/i2c"
 	"periph.io/x/conn/v3/physic"
 	"periph.io/x/devices/v3/bmxx80"
 )
 
-func monitorSensors(i2cBus i2c.Bus) error {
+func monitorSensors(ctx context.Context, i2cBus i2c.Bus) error {
 	tempOpts := bmxx80.Opts{Temperature: bmxx80.O16x, Pressure: bmxx80.O16x, Humidity: bmxx80.O16x}
 	temp, err := bmxx80.NewI2C(i2cBus, 0x77, &tempOpts)
 	if err != nil {
@@ -23,7 +24,7 @@ func monitorSensors(i2cBus i2c.Bus) error {
 		l := trace.NewEventLog("sensor", "environment")
 		defer l.Finish()
 		first := true
-		log.Printf("starting bme280 loop")
+		log.Info(ctx, "starting bme280 loop")
 		for {
 			if first {
 				first = false
@@ -70,7 +71,7 @@ func monitorSensors(i2cBus i2c.Bus) error {
 			l.Errorf("adjust tsl2591 integration time: %v", err)
 			return
 		}
-		log.Printf("starting tsl2591 loop")
+		log.Info(ctx, "starting tsl2591 loop")
 		for {
 			time.Sleep(time.Second)
 			both, ir, err := light.GetLuminosity()

@@ -4,12 +4,13 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"strings"
 	"time"
 
+	"github.com/jrockway/monorepo/internal/log"
+	"github.com/jrockway/monorepo/internal/pctx"
 	"golang.org/x/net/trace"
 )
 
@@ -21,7 +22,8 @@ var (
 func init() {
 	token = os.Getenv("INFLUXDB_TOKEN")
 	if token == "" {
-		log.Println("not sending to influxdb; $INFLUXDB_TOKEN not set")
+		ctx := pctx.Background("influx-init")
+		log.Error(ctx, "not sending to influxdb; $INFLUXDB_TOKEN not set")
 		influxEventLog.Errorf("not sent; INFLUXDB_TOKEN is empty")
 	}
 }

@@ -10,7 +10,6 @@ import (
 	"html/template"
 	"image"
 	"image/png"
-	"log"
 	"net"
 	"net/http"
 	"os"
@@ -22,6 +21,9 @@ import (
 
 	"github.com/facebookincubator/ntp/protocol/chrony"
 	"github.com/jrockway/go-gpsd"
+	"github.com/jrockway/monorepo/internal/log"
+	"github.com/jrockway/monorepo/internal/pctx"
+	"go.uber.org/zap"
 )
 
 var (
@@ -190,7 +192,7 @@ func ServeStatus(w http.ResponseWriter, r *http.Request) {
 	statusMu.RLock()
 	defer statusMu.RUnlock()
 	if err := index.Execute(w, status); err != nil {
-		log.Printf("execute template: %v", err)
+		log.Error(r.Context(), "problem executing template", zap.Error(err))
 	}
 }
 
@@ -319,7 +321,7 @@ func formatImage(src *image.RGBA) template.URL {
 	}
 	buf := new(bytes.Buffer)
 	if err := png.Encode(buf, img); err != nil {
-		log.Printf("problem encoding image: %v", err)
+		log.Error(pctx.Background("formatImage"), "problem encoding image", zap.Error(err))
 		return ErrorAsDataURL(err)
 	}
 	return ImageAsDataURL(buf.Bytes())
@@ -357,12 +359,12 @@ plot "/dev/fd/3" using 1:2:3:4 with circles lc palette, "/dev/fd/4" using 1:2:3:
 `)
 	unusedR, unusedW, err := os.Pipe()
 	if err != nil {
-		log.Printf("make 'unused' data pipe: %v", err)
+		log.Error(pctx.Background("formatSkyView"), "problem making 'unused' data pipe", zap.Error(err))
 		return ErrorAsDataURL(err)
 	}
 	usedR, usedW, err := os.Pipe()
 	if err != nil {
-		log.Printf("make 'used' data pipe: %v", err)
+		log.Error(pctx.Background("formatSkyView"), "problem making 'used' data pipe", zap.Error(err))
 		return ErrorAsDataURL(err)
 	}
 
@@ -389,7 +391,7 @@ plot "/dev/fd/3" using 1:2:3:4 with circles lc palette, "/dev/fd/4" using 1:2:3:
 	cmd.Stderr = stderr
 	cmd.ExtraFiles = []*os.File{unusedR, usedR}
 	if err := cmd.Run(); err != nil {
-		log.Printf("problem running gnuplot: %v (%s)", err, stderr.String())
+		log.Error(pctx.Background("formatSkyView"), "problem running gnuplot", zap.Error(err), zap.Stringer("output", stderr))
 		return ErrorAsDataURL(err)
 	}
 	return ImageAsDataURL(stdout.Bytes())
@@ -413,7 +415,7 @@ plot "/dev/fd/3"
 `)
 	dataR, dataW, err := os.Pipe()
 	if err != nil {
-		log.Printf("make data pipe: %v", err)
+		log.Error(pctx.Background("formatDeviation"), "problem making data pipe", zap.Error(err))
 		return ErrorAsDataURL(err)
 	}
 	go func() {
@@ -433,7 +435,7 @@ plot "/dev/fd/3"
 	cmd.Stderr = stderr
 	cmd.ExtraFiles = []*os.File{dataR}
 	if err := cmd.Run(); err != nil {
-		log.Printf("problem running gnuplot: %v (%s)", err, stderr.String())
+		log.Error(pctx.Background("formatDeviation"), "problem running gnuplot", zap.Error(err), zap.Stringer("output", stderr))
 		return ErrorAsDataURL(err)
 	}
 	return ImageAsDataURL(stdout.Bytes())

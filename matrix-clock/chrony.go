@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"net"
 	"time"
 
 	"github.com/facebookincubator/ntp/protocol/chrony"
+	"github.com/jrockway/monorepo/internal/log"
+	"go.uber.org/zap"
 	"golang.org/x/net/trace"
 )
 
@@ -18,19 +20,19 @@ type SourceInfo struct {
 	Stats chrony.SourceStats
 }
 
-func watchChrony() {
+func watchChrony(ctx context.Context) {
 	l := trace.NewEventLog("service", "chrony")
 	defer l.Finish()
 	for {
-		if err := monitorChrony(l); err != nil {
-			log.Printf("monitorChrony exited unexpectedly: %v", err)
+		if err := monitorChrony(ctx, l); err != nil {
+			log.Info(ctx, "monitorChrony exited unexpectedly; sleeping 10s", zap.Error(err))
 			l.Errorf("monitorChrony exited unexpectedly: %v", err)
 			time.Sleep(10 * time.Second)
 		}
 	}
 }
 
-func monitorChrony(l trace.EventLog) error {
+func monitorChrony(ctx context.Context, l trace.EventLog) error {
 	l.Printf("dial localhost:323")
 	conn, err := net.DialTimeout("udp", "localhost:323", time.Second)
 	if err != nil {
@@ -39,7 +41,7 @@ func monitorChrony(l trace.EventLog) error {
 	}
 
 	c := chrony.Client{Sequence: 1, Connection: conn}
-	log.Printf("connected to chronyd ok; starting loop")
+	log.Info(ctx, "connected to chronyd ok; starting loop")
 	var wait bool
 	for {
 		if wait {
