@@ -17,9 +17,8 @@ var (
 
 type jlogEncoder struct {
 	// Mutex protects against concurrent calls.  Cloned encoders share the jlog output state,
-	// which isn't thread safe.  Cloned encoders lock enc.root.Mutex.
-	sync.Mutex
-	root *jlogEncoder
+	// which isn't thread safe unless this mutex is copied.
+	*sync.Mutex
 
 	zapcore.Encoder                        // Encoder encodes fields to JSON using zap's exact algorithm.
 	cfg             *zapcore.EncoderConfig // cfg lets us parse the encoded JSON and remove what jlog already handles.
@@ -59,6 +58,7 @@ func NewJlogEncoder(zcfg zapcore.EncoderConfig, jcfg ZapEncoderConfig) zapcore.E
 	}
 	l := new(line) // no need to allocate for each log
 	return &jlogEncoder{
+		Mutex:   new(sync.Mutex),
 		Encoder: zapcore.NewJSONEncoder(zcfg),
 		cfg:     &zcfg,
 		line:    l,
@@ -74,7 +74,10 @@ func NewJlogEncoder(zcfg zapcore.EncoderConfig, jcfg ZapEncoderConfig) zapcore.E
 // Clone implements zapcore.Encoder.
 func (enc *jlogEncoder) Clone() zapcore.Encoder {
 	result := &jlogEncoder{
-		root:    enc,
+		Mutex:   enc.Mutex,
+		cfg:     enc.cfg,
+		line:    new(line),
+		schema:  enc.schema,
 		Encoder: enc.Encoder.Clone(),
 	}
 	result.fields = append(result.fields, enc.fields...)
@@ -84,11 +87,6 @@ func (enc *jlogEncoder) Clone() zapcore.Encoder {
 // EncodeEntry implements zapcore.Encoder.
 func (enc *jlogEncoder) EncodeEntry(entry zapcore.Entry, fields []zapcore.Field) (*buffer.Buffer, error) {
 	encoder := enc.Encoder
-	var parentFields []string
-	if enc.root != nil {
-		parentFields = enc.fields
-		enc = enc.root
-	}
 	enc.Lock()
 	defer enc.Unlock()
 
@@ -124,7 +122,7 @@ func (enc *jlogEncoder) EncodeEntry(entry zapcore.Entry, fields []zapcore.Field)
 		enc.cfg.CallerKey,
 		enc.cfg.FunctionKey,
 	}
-	enc.schema.state.seenFields = append(enc.schema.state.seenFields, parentFields...)
+	enc.schema.state.seenFields = append(enc.schema.state.seenFields, enc.fields...)
 	for _, f := range fields {
 		enc.schema.state.seenFields = append(enc.schema.state.seenFields, f.Key)
 	}

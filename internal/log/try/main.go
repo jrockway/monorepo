@@ -49,4 +49,8 @@ func main() {
 	for i := 0; i < 2; i++ {
 		<-ch
 	}
+	child2 := log.ChildLogger(child, "child2", log.WithFields(zap.Bool("in_child2", true)))
+	log.Info(child2, "hello from child2")
+	log.Info(child, "hello from child1 again")
+	log.Info(ctx, "hello from original logger again")
 }
