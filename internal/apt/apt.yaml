@@ -9,9 +9,9 @@ sources:
     - channel: bookworm-pgdg main
       url: https://apt.postgresql.org/pub/repos/apt
     - channel: bookworm main
-      url: https://snapshot-cloudflare.debian.org/archive/debian/20241212T204812Z
+      url: https://snapshot-cloudflare.debian.org/archive/debian/20250307T000000Z
     - channel: bookworm-security main
-      url: https://snapshot-cloudflare.debian.org/archive/debian-security/20241212T193325Z
+      url: https://snapshot-cloudflare.debian.org/archive/debian-security/20250307T000000Z
 
 archs:
     - "amd64"

@@ -95,52 +95,68 @@ func Unpack(ctx context.Context, name, rlocation string) (string, error) {
 	if err != nil {
 		return "", errors.Wrapf(err, "unpack tar from %v", postgresArchiveRlocation)
 	}
+	// See if binary patching has been started.
 	patched := filepath.Join(root, ".binaries-patched")
-	if _, err := os.Stat(patched); err == nil {
-		log.Debug(ctx, "skipping interpreter patch; binaries already patched")
-		return root, nil
+	started := filepath.Join(root, ".binary-patching-started")
+	startedFh, err := os.OpenFile(started, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o666)
+	if err != nil {
+		if !os.IsExist(err) {
+			return "", errors.Wrap(err, "create .binary-patching-started")
+		}
+		// It has, so wait in a loop for that process to finish.
+		for i := 0; i < 25; i++ {
+			if _, err := os.Stat(patched); err == nil {
+				log.Debug(ctx, "skipping interpreter patch; binaries already patched")
+				return root, nil
+			}
+			log.Debug(ctx, "another process has already started patching binaries; waiting for that to complete", log.RetryAttempt(i, 50))
+			time.Sleep(100 * time.Millisecond)
+		}
+		return "", errors.New("another process failed to patch the binaries in 2500ms")
+	}
+	if err := startedFh.Close(); err != nil {
+		return "", errors.Wrap(err, "close .binary-patching-started file")
 	}
 	interp := localLdSo(root)
 	rpath := postgresRpath(root)
 	// The binaries haven't been patched yet.  Patch them.
 	bin := root
+	var patchErrs error
 	if err := filepath.Walk(bin, func(path string, info fs.FileInfo, err error) error {
-		if err != nil {
+		switch {
+		case err != nil:
 			return errors.Wrap(err, "WalkFn called with error")
-		}
-		if interp == "" {
+		case interp == "":
 			return nil
-		}
-		if info.IsDir() {
+		case info.IsDir():
 			return nil
-		}
-		if !info.Mode().IsRegular() {
+		case !info.Mode().IsRegular():
 			return nil
-		}
-		if strings.Contains(path, "ld-linux") {
+		case strings.Contains(path, "ld-linux"):
 			// Patching ld.so causes Bad Things to occur.
 			return nil
-		}
-		if strings.Contains(path, "/bin/") {
+		case strings.Contains(path, "ld.so.conf"):
+			return nil
+		case strings.Contains(path, "/bin/"):
 			if err := patch(ctx, interp, rpath, path); err != nil {
 				log.Debug(ctx, "failed to patch binary", zap.String("path", path), zap.Error(err))
+				errors.JoinInto(&patchErrs, errors.Wrapf(err, "patch %v", path))
 			}
-		}
-		if strings.Contains(filepath.Base(path), ".so") {
+		case strings.Contains(filepath.Base(path), ".so"):
 			if err := patch(ctx, "", rpath, path); err != nil {
 				log.Debug(ctx, "failed to patch library", zap.String("path", path), zap.Error(err))
+				errors.JoinInto(&patchErrs, errors.Wrapf(err, "patch %v", path))
 			}
 		}
 		return nil
 	}); err != nil {
 		return "", errors.Wrap(err, "patch binaries")
 	}
-	w, err := os.Create(patched)
-	if err != nil {
-		return "", errors.Wrap(err, "create .binaries-patched note")
+	if err := patchErrs; err != nil {
+		return "", errors.Wrap(err, "execute patches")
 	}
-	if err := w.Close(); err != nil {
-		return "", errors.Wrap(err, "close .binaries-patched note")
+	if err := os.WriteFile(patched, nil, 0o666); err != nil {
+		return "", errors.Wrap(err, "create .binaries-patched note")
 	}
 	return root, nil
 }

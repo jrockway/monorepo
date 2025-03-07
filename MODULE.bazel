@@ -210,7 +210,7 @@ use_repo(postgres, "com_enterprisedb_get_postgresql_macos")
 apt = use_extension("@rules_distroless//apt:extensions.bzl", "apt")
 apt.install(
     name = "apt",
-    lock = "//internal/apt:apt.lock.json",
+    lock = "@@//internal/apt:apt.lock.json",
     manifest = "//internal/apt:apt.yaml",
     resolve_transitive = True,
 )
