@@ -129,10 +129,11 @@ func LookupSession(ctx context.Context, db sqlx.ExtContext, id []byte) (*types.S
 	if err != nil {
 		return nil, fmt.Errorf("read session: %w", err)
 	}
-	if session.GetExpiresAt().AsTime().Before(time.Now()) {
+	now := time.Now().Truncate(time.Millisecond)
+	if e := session.GetExpiresAt().AsTime().Truncate(time.Millisecond); e.Before(now) || e.Equal(now) {
 		return nil, ErrSessionExpired
 	}
-	if session.GetCreatedAt().AsTime().After(time.Now()) {
+	if session.GetCreatedAt().AsTime().Truncate(time.Millisecond).After(now) {
 		return nil, ErrSessionNotYetCreated
 	}
 	return session, nil
@@ -197,7 +198,7 @@ func RevokeSession(ctx context.Context, tx *sqlx.Tx, id []byte, reason string) e
 	if session.GetMetadata().GetRevocationReason() == "" {
 		session.GetMetadata().RevocationReason = reason
 	}
-	session.ExpiresAt = timestamppb.Now()
+	session.ExpiresAt = timestamppb.New(time.Now().Truncate(time.Millisecond))
 	if err := UpdateSession(ctx, tx, session); err != nil {
 		return fmt.Errorf("store expired session: %w", err)
 	}

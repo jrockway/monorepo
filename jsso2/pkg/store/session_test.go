@@ -159,8 +159,8 @@ func TestSessions(t *testing.T) {
 		}); err != nil {
 			t.Fatal(err)
 		}
-		if _, err := LookupSession(e.Context, c.db, session.GetId()); err == nil {
-			t.Error("expected lookup of newly-expired session to fail")
+		if s, err := LookupSession(e.Context, c.db, session.GetId()); err == nil {
+			t.Errorf("expected lookup of newly-expired session to fail; got: %v", s.String())
 		} else if got, want := err, ErrSessionExpired; !errors.Is(got, want) {
 			t.Errorf("expired session: lookup error:\n got: %v\nwant: %v", got, want)
 		}
