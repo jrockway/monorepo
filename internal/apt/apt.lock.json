@@ -314,9 +314,9 @@
 					"version": "3.0.15-1~deb12u1"
 				},
 				{
-					"key": "postgresql-common_274.pgdg120-p-1_amd64",
+					"key": "postgresql-common_277.pgdg120-p-1_amd64",
 					"name": "postgresql-common",
-					"version": "274.pgdg120+1"
+					"version": "277.pgdg120+1"
 				},
 				{
 					"key": "perl_5.36.0-7-p-deb12u1_amd64",
@@ -374,9 +374,9 @@
 					"version": "0.0.17+nmu1"
 				},
 				{
-					"key": "postgresql-common-dev_274.pgdg120-p-1_amd64",
+					"key": "postgresql-common-dev_277.pgdg120-p-1_amd64",
 					"name": "postgresql-common-dev",
-					"version": "274.pgdg120+1"
+					"version": "277.pgdg120+1"
 				},
 				{
 					"key": "libipc-run-perl_20220807.0-1_amd64",
@@ -389,9 +389,9 @@
 					"version": "1:1.17-1"
 				},
 				{
-					"key": "postgresql-client-common_274.pgdg120-p-1_amd64",
+					"key": "postgresql-client-common_277.pgdg120-p-1_amd64",
 					"name": "postgresql-client-common",
-					"version": "274.pgdg120+1"
+					"version": "277.pgdg120+1"
 				},
 				{
 					"key": "netbase_6.4_amd64",
@@ -1157,13 +1157,13 @@
 		{
 			"arch": "amd64",
 			"dependencies": [],
-			"key": "postgresql-common_274.pgdg120-p-1_amd64",
+			"key": "postgresql-common_277.pgdg120-p-1_amd64",
 			"name": "postgresql-common",
-			"sha256": "fe0c5a2b89dd7272a44c182513d04e93a441328508720ef6ca1c75df3b8f51ef",
+			"sha256": "99eb6c1fdebb1bb049c15e1494f57ab682e898de46ed6134daa3271fc89d5a3f",
 			"urls": [
-				"https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-common/postgresql-common_274.pgdg120+1_all.deb"
+				"https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-common/postgresql-common_277.pgdg120+1_all.deb"
 			],
-			"version": "274.pgdg120+1"
+			"version": "277.pgdg120+1"
 		},
 		{
 			"arch": "amd64",
@@ -1289,13 +1289,13 @@
 		{
 			"arch": "amd64",
 			"dependencies": [],
-			"key": "postgresql-common-dev_274.pgdg120-p-1_amd64",
+			"key": "postgresql-common-dev_277.pgdg120-p-1_amd64",
 			"name": "postgresql-common-dev",
-			"sha256": "8841caa4242507af4f22e72a105982d337ba9d2ced7984902a0066bea26bb668",
+			"sha256": "46bdff727870d11322d2e7d90063d5cd3a2b72cdf7cc6cd5006c2fbf035416d5",
 			"urls": [
-				"https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-common/postgresql-common-dev_274.pgdg120+1_all.deb"
+				"https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-common/postgresql-common-dev_277.pgdg120+1_all.deb"
 			],
-			"version": "274.pgdg120+1"
+			"version": "277.pgdg120+1"
 		},
 		{
 			"arch": "amd64",
@@ -1322,13 +1322,13 @@
 		{
 			"arch": "amd64",
 			"dependencies": [],
-			"key": "postgresql-client-common_274.pgdg120-p-1_amd64",
+			"key": "postgresql-client-common_277.pgdg120-p-1_amd64",
 			"name": "postgresql-client-common",
-			"sha256": "fadc7601179225d9914fc447677412ee7c75baa6ef5ec492078a0ca9c22ac6b7",
+			"sha256": "06e890530154c6d40fea0e518810fcb2118fad557a58e9905c5275d7ad4d501b",
 			"urls": [
-				"https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-common/postgresql-client-common_274.pgdg120+1_all.deb"
+				"https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-common/postgresql-client-common_277.pgdg120+1_all.deb"
 			],
-			"version": "274.pgdg120+1"
+			"version": "277.pgdg120+1"
 		},
 		{
 			"arch": "amd64",
@@ -1891,9 +1891,9 @@
 					"version": "3.0.15-1~deb12u1"
 				},
 				{
-					"key": "postgresql-common_274.pgdg120-p-1_arm64",
+					"key": "postgresql-common_277.pgdg120-p-1_arm64",
 					"name": "postgresql-common",
-					"version": "274.pgdg120+1"
+					"version": "277.pgdg120+1"
 				},
 				{
 					"key": "perl_5.36.0-7-p-deb12u1_arm64",
@@ -1951,9 +1951,9 @@
 					"version": "0.0.17+nmu1"
 				},
 				{
-					"key": "postgresql-common-dev_274.pgdg120-p-1_arm64",
+					"key": "postgresql-common-dev_277.pgdg120-p-1_arm64",
 					"name": "postgresql-common-dev",
-					"version": "274.pgdg120+1"
+					"version": "277.pgdg120+1"
 				},
 				{
 					"key": "libipc-run-perl_20220807.0-1_arm64",
@@ -1966,9 +1966,9 @@
 					"version": "1:1.17-1"
 				},
 				{
-					"key": "postgresql-client-common_274.pgdg120-p-1_arm64",
+					"key": "postgresql-client-common_277.pgdg120-p-1_arm64",
 					"name": "postgresql-client-common",
-					"version": "274.pgdg120+1"
+					"version": "277.pgdg120+1"
 				},
 				{
 					"key": "netbase_6.4_arm64",
@@ -2734,13 +2734,13 @@
 		{
 			"arch": "arm64",
 			"dependencies": [],
-			"key": "postgresql-common_274.pgdg120-p-1_arm64",
+			"key": "postgresql-common_277.pgdg120-p-1_arm64",
 			"name": "postgresql-common",
-			"sha256": "fe0c5a2b89dd7272a44c182513d04e93a441328508720ef6ca1c75df3b8f51ef",
+			"sha256": "99eb6c1fdebb1bb049c15e1494f57ab682e898de46ed6134daa3271fc89d5a3f",
 			"urls": [
-				"https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-common/postgresql-common_274.pgdg120+1_all.deb"
+				"https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-common/postgresql-common_277.pgdg120+1_all.deb"
 			],
-			"version": "274.pgdg120+1"
+			"version": "277.pgdg120+1"
 		},
 		{
 			"arch": "arm64",
@@ -2866,13 +2866,13 @@
 		{
 			"arch": "arm64",
 			"dependencies": [],
-			"key": "postgresql-common-dev_274.pgdg120-p-1_arm64",
+			"key": "postgresql-common-dev_277.pgdg120-p-1_arm64",
 			"name": "postgresql-common-dev",
-			"sha256": "8841caa4242507af4f22e72a105982d337ba9d2ced7984902a0066bea26bb668",
+			"sha256": "46bdff727870d11322d2e7d90063d5cd3a2b72cdf7cc6cd5006c2fbf035416d5",
 			"urls": [
-				"https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-common/postgresql-common-dev_274.pgdg120+1_all.deb"
+				"https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-common/postgresql-common-dev_277.pgdg120+1_all.deb"
 			],
-			"version": "274.pgdg120+1"
+			"version": "277.pgdg120+1"
 		},
 		{
 			"arch": "arm64",
@@ -2899,13 +2899,13 @@
 		{
 			"arch": "arm64",
 			"dependencies": [],
-			"key": "postgresql-client-common_274.pgdg120-p-1_arm64",
+			"key": "postgresql-client-common_277.pgdg120-p-1_arm64",
 			"name": "postgresql-client-common",
-			"sha256": "fadc7601179225d9914fc447677412ee7c75baa6ef5ec492078a0ca9c22ac6b7",
+			"sha256": "06e890530154c6d40fea0e518810fcb2118fad557a58e9905c5275d7ad4d501b",
 			"urls": [
-				"https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-common/postgresql-client-common_274.pgdg120+1_all.deb"
+				"https://apt.postgresql.org/pub/repos/apt/pool/main/p/postgresql-common/postgresql-client-common_277.pgdg120+1_all.deb"
 			],
-			"version": "274.pgdg120+1"
+			"version": "277.pgdg120+1"
 		},
 		{
 			"arch": "arm64",
